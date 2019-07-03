@@ -1,0 +1,1589 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-32x32-next.ico?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.ico?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-32x32-next.ico?v=7.1.0">
+
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.1.0',
+    sidebar: {"position":"left","display":"always","offset":12,"onmobile":true,"dimmer":true},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="在学习前端框架Vue时，遇到了组件之间的传值问题，索性take a note。">
+<meta name="keywords" content="组件传值">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vue之组件传值">
+<meta property="og:url" content="https://8bun.github.io/2019/05/13/Vue之组件传值/index.html">
+<meta property="og:site_name" content="MrChen">
+<meta property="og:description" content="在学习前端框架Vue时，遇到了组件之间的传值问题，索性take a note。">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://camo.githubusercontent.com/56140fc4fee1cdb5da336aa956e6267bec9af65d/687474703a2f2f696d672e736d79687661652e636f6d2f32303138303730315f313634302e706e67">
+<meta property="og:image" content="https://camo.githubusercontent.com/49a57cccd023100015599065f39503c546406880/687474703a2f2f696d672e736d79687661652e636f6d2f32303138303730315f313733352e706e67">
+<meta property="og:image" content="https://camo.githubusercontent.com/6d6f1c71838fbfc034f4cb61bfb107957b545291/687474703a2f2f696d672e736d79687661652e636f6d2f32303138303730315f313734302e706e67">
+<meta property="og:updated_time" content="2019-05-13T12:27:56.357Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Vue之组件传值">
+<meta name="twitter:description" content="在学习前端框架Vue时，遇到了组件之间的传值问题，索性take a note。">
+<meta name="twitter:image" content="https://camo.githubusercontent.com/56140fc4fee1cdb5da336aa956e6267bec9af65d/687474703a2f2f696d672e736d79687661652e636f6d2f32303138303730315f313634302e706e67">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="MrChen" type="application/atom+xml">
+
+
+
+  
+  
+  <link rel="canonical" href="https://8bun.github.io/2019/05/13/Vue之组件传值/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Vue之组件传值 | MrChen</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+  <!-- 音乐播放器 -->
+  <link rel="stylesheet" href="/dist/APlayer.min.css">
+  <div id="aplayer"></div>
+  <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+  <script type="text/javascript" src="/dist/music.js"></script>
+  <!-- Alt+Z:打开夜间模式
+  Alt+X:关闭
+  Alt+↑:增加亮度
+  Alt+↓:降低亮度 -->
+  <script type="text/javascript" src="/js/night_mode.js"></script>
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">MrChen</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">行者</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-首页">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-读书">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/ReadBook/" rel="section"><i class="menu-item-icon fa fa-fw fa-book"></i> <br>读书</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-标签">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-分类">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-历程">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>历程</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-关于">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>Search</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://8bun.github.io/2019/05/13/Vue之组件传值/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Mr.Chen">
+      <meta itemprop="description" content="鹿有森林，鲸有深海">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MrChen">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Vue之组件传值
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-05-13 18:57:55 / Modified: 20:27:56" itemprop="dateCreated datePublished" datetime="2019-05-13T18:57:55+08:00">2019-05-13</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Vue/" itemprop="url" rel="index"><span itemprop="name">Vue</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             Views:  
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在学习前端框架Vue时，遇到了组件之间的传值问题，索性take a note。</p>
+<a id="more"></a>
+<h2 id="组件"><a href="#组件" class="headerlink" title="组件"></a>组件</h2><h2 id="父子组件"><a href="#父子组件" class="headerlink" title="父子组件"></a>父子组件</h2><p>父子关系即是组件 A 在它的模板中使用了组件 B，那么组件 A 就是父组件，组件 B 就是子组件。</p>
+<p>我们可以这样理解：Vue实例就是一个父组件，而我们定义的组件（包括全局组件、私有组件）就都是子组件。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">// 注册一个子组件</span><br><span class="line">Vue.component('child', &#123;</span><br><span class="line">    data: function()&#123;</span><br><span class="line">        return &#123;</span><br><span class="line">            text: '我是father的子组件！'</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    template: '<span class="tag">&lt;<span class="name">span</span>&gt;</span>&#123;&#123; text &#125;&#125;<span class="tag">&lt;/<span class="name">span</span>&gt;</span>'</span><br><span class="line">&#125;)</span><br><span class="line">// 注册一个父组件</span><br><span class="line">Vue.component('father', &#123;</span><br><span class="line">    template: '<span class="tag">&lt;<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">child</span>&gt;</span><span class="tag">&lt;/<span class="name">child</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span>'  //在模板中使用了child组件</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>直接使用father组件的时候：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;div id=&quot;app&quot;&gt;</span><br><span class="line">    &lt;father&gt;&lt;/father&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+<p>页面中就会渲染出 ：我是father的子组件！</p>
+<p>father 组件在模板中使用了 child 组件，所以它就是父组件，child 组件被使用，所以 child 组件就是子组件。</p>
+<h4 id="兄弟组件"><a href="#兄弟组件" class="headerlink" title="兄弟组件"></a>兄弟组件</h4><p>两个组件互不引用，则为兄弟组件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Vue.component(&apos;brother1&apos;, &#123;</span><br><span class="line">    template: &apos;&lt;div&gt;我是大哥&lt;/div&gt;&apos;</span><br><span class="line">&#125;)</span><br><span class="line">Vue.component(&apos;brother2&apos;, &#123;</span><br><span class="line">    template: &apos;&lt;div&gt;我是小弟&lt;/div&gt;&apos;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>使用组件的时候：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;div id=&quot;app&quot;&gt;</span><br><span class="line">    &lt;brother1&gt;&lt;/brother1&gt;</span><br><span class="line">    &lt;brother2&gt;&lt;/brother2&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+<p>页面中就会渲染出 ：</p>
+<p>我是大哥</p>
+<p>我是小弟</p>
+<h2 id="Prop"><a href="#Prop" class="headerlink" title="Prop"></a>Prop</h2><p>子组件想要使用父组件的数据，我们需要通过子组件的 props 选项来获得父组件传过来的数据。以下我使用在 .vue 文件中的格式来写例子。</p>
+<p>在父组件 father.vue 中引用子组件 child.vue，把 name 的值传给 child 组件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">// child.vue</span><br><span class="line">&lt;template&gt;</span><br><span class="line">    &lt;span&gt;Hello &#123;&#123;message&#125;&#125;&lt;/span&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">    export default &#123; </span><br><span class="line">        // 在 props 中声明获取父组件的数据通过 message 传过来，message为值的标签</span><br><span class="line">        props: [&apos;message&apos;]</span><br><span class="line">    &#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">//father.vue</span><br><span class="line">&lt;template&gt;</span><br><span class="line">    &lt;div class=&quot;app&quot;&gt;</span><br><span class="line">        // message 定义在子组件的 props 中，message为值的标签，name为值的key</span><br><span class="line">        &lt;child :message=&quot;name&quot;&gt;&lt;/child&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">    import child from &apos;./child.vue&apos;;</span><br><span class="line">    export default &#123;</span><br><span class="line">        components: &#123;</span><br><span class="line">            child</span><br><span class="line">        &#125;,</span><br><span class="line">        data() &#123;</span><br><span class="line">            return &#123;</span><br><span class="line">                name: &apos;World&apos;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>页面会渲染出Hello World</p>
+<p>举例2：</p>
+<p>在父组件传值的子组件内部定义prop数组，将父组件内部的data内部要传的数据的名称作为子组件引用值的属性的值，</p>
+<p>如，有子组件component1，父组件div，在父组件内部引用子组件，子组件使用父组件的值，</p>
+<p>要传父组件data中的msg：’父组件中的数据’，在子组件使用父组件的值时，如下使用v-bind定义属性名parent-msg作为使用值的标签（你也可以设置为:parentMsg）所以，在目的地子组件内部定义prop属性，值设置为parentMsg（驼峰式命名的 prop 需要转换为相对应的短横线隔开式 is-show）。然后:parentMsg的值，为msg（要传父组件data中的值的keyName）</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"ie=edge"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"vue2.5.16.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"app"</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 第三步：父组件在引用子组件的时候， 通过 属性绑定（v-bind:）的形式,  --&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--把需要传递给子组件的数据，以属性绑定的形式，传递到子组件内部，供子组件使用 --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">component1</span> <span class="attr">v-bind:parent-msg</span>=<span class="string">"msg"</span>&gt;</span><span class="tag">&lt;/<span class="name">component1</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- 定义子组件的模板 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">template</span> <span class="attr">id</span>=<span class="string">"myTemplate"</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 第二步：在子组件的模板中，使用props中的属性 --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">h2</span> @<span class="attr">click</span>=<span class="string">"change"</span>&gt;</span>我是子组件。我想使用父组件中的数据parentMsg： &#123;&#123; parentMsg &#125;&#125;<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">        <span class="comment">// 创建 Vue 实例，得到 ViewModel</span></span></span><br><span class="line"><span class="javascript">        <span class="keyword">var</span> vm = <span class="keyword">new</span> Vue(&#123;</span></span><br><span class="line"><span class="javascript">            el: <span class="string">'#app'</span>,  <span class="comment">//在外面定义了id为app的组件作为父组件</span></span></span><br><span class="line"><span class="undefined">            data: &#123;</span></span><br><span class="line"><span class="javascript">                msg: <span class="string">'父组件中的数据'</span></span></span><br><span class="line"><span class="undefined">            &#125;,</span></span><br><span class="line"><span class="undefined">            methods: &#123;&#125;,</span></span><br><span class="line"><span class="javascript">            <span class="comment">//自定义组件</span></span></span><br><span class="line"><span class="undefined">            components: &#123;</span></span><br><span class="line"><span class="javascript">                <span class="comment">// 自定义组件作为子组件时默认无法访问到父组件中的 data 中的数据 和 methods 中的方法</span></span></span><br><span class="line"><span class="javascript">                component1: &#123; <span class="comment">//将组件的名称定义为 component1</span></span></span><br><span class="line"><span class="javascript">                    template: <span class="string">'#myTemplate'</span>,  <span class="comment">//在外面定义了id为myTemplate的template</span></span></span><br><span class="line"><span class="javascript">                    data() &#123; <span class="comment">// 注意： 自定义组件中的 data 数据，并不是通过 父组件传递过来的，而是组件自身私有的，比如： 子组件通过 Ajax ，请求回来的数据，都可以放到 data 身上；</span></span></span><br><span class="line"><span class="javascript">                        <span class="comment">// data 上的数据，都是可读可写的</span></span></span><br><span class="line"><span class="javascript">                        <span class="keyword">return</span> &#123;</span></span><br><span class="line"><span class="javascript">                            title: <span class="string">'自定义组件私有的数据 title'</span>,</span></span><br><span class="line"><span class="javascript">                            content: <span class="string">'自定义组件私有的数据 content'</span></span></span><br><span class="line"><span class="undefined">                        &#125;</span></span><br><span class="line"><span class="undefined">                    &#125;,</span></span><br><span class="line"><span class="undefined">             </span></span><br><span class="line"><span class="javascript">                    <span class="comment">// 注意： 组件中的 所有 props 中的数据，都是通过 父组件 传递给子组件的</span></span></span><br><span class="line"><span class="javascript">                    <span class="comment">// props 中的数据，都是只读的，无法重新赋值</span></span></span><br><span class="line"><span class="javascript">                    props: [<span class="string">'parentMsg'</span>], <span class="comment">// 第一步：把父组件传递过来的 parentMsg 属性，先在 props 数组中，定义一下，这样，才能使用这个数据</span></span></span><br><span class="line"><span class="undefined">                    directives: &#123;&#125;,</span></span><br><span class="line"><span class="undefined">                    filters: &#123;&#125;,</span></span><br><span class="line"><span class="undefined">                    components: &#123;&#125;,</span></span><br><span class="line"><span class="undefined">                    methods: &#123;</span></span><br><span class="line"><span class="undefined">                        change() &#123;</span></span><br><span class="line"><span class="javascript">                            <span class="comment">// 下面这行会报错，因为子组件不要直接修改父组件中的data数据</span></span></span><br><span class="line"><span class="javascript">                            <span class="comment">// this.parentMsg = '被修改了'</span></span></span><br><span class="line"><span class="undefined">                        &#125;</span></span><br><span class="line"><span class="undefined">                    &#125;</span></span><br><span class="line"><span class="undefined">                &#125;</span></span><br><span class="line"><span class="undefined">            &#125;</span></span><br><span class="line"><span class="undefined">        &#125;);</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><strong>子组件中，data中的数据和props中的数据的区别</strong>：</p>
+<ul>
+<li>子组件中的 data 数据，并不是通过 父组件传递过来的，而是子组件自身私有的，比如： 子组件通过 Ajax ，请求回来的数据，都可以放到 data 身上。props 中的数据，都是通过 父组件 传递给子组件的。</li>
+<li>data中的数据是可读可写的；props中的属性只是可读的，无法重新赋值，重新赋值会报错（也就是说，子组件不要直接去修改父组件中的数据）。</li>
+</ul>
+<h2 id="父组件将方法传递给子组件"><a href="#父组件将方法传递给子组件" class="headerlink" title="父组件将方法传递给子组件"></a>父组件将方法传递给子组件</h2><blockquote>
+<p>父组件通过事件绑定机制，将父组件的方法传递给子组件</p>
+</blockquote>
+<p>代码举例：</p>
+<p>下面例子，我们来演示 当点击子组件的按钮时，拿到父组件传递过来的 方法，并调用这个方法</p>
+<p>我们在子组件的method中定义了一个函数来实现调用父组件的show函数，通过调用$emit函数，在子组件地方使用了@关键字来表示要调用父组件的事件属性parent-show，然后将函数名作为值，此时，对于$emit函数，我们使用事件属性名parent-show作为参数传入。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"ie=edge"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"vue2.5.16.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"app"</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- 父组件向子组件 传递 方法，是通过 事件绑定机制； v-on。当我们自定义了 一个 事件属性 parent-show（这		个地方不能用驼峰命名）之后，--&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 那么，子组件就能够，通过 emit 来调用 传递进去的 这个 方法了 --&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 【第一步】。意思是说，show是父组件的方法名，parent-show是自定义的事件属性，稍后要在子组件中用		   到 --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">component1</span> @<span class="attr">parent-show</span>=<span class="string">'show'</span>&gt;</span><span class="tag">&lt;/<span class="name">component1</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&lt;!-- 定义子组件的模板 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">template</span> <span class="attr">id</span>=<span class="string">"myTemplate"</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 【第二步】按照正常的写法来：点击按钮，调用子组件的方法 --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> @<span class="attr">click</span>=<span class="string">"childClick"</span>&gt;</span>我是子组件，点击调用父组件的方法<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">        <span class="comment">// 创建 Vue 实例，得到 ViewModel</span></span></span><br><span class="line"><span class="javascript">        <span class="keyword">var</span> vm = <span class="keyword">new</span> Vue(&#123;</span></span><br><span class="line"><span class="javascript">            el: <span class="string">'#app'</span>,  </span></span><br><span class="line"><span class="javascript">            data: &#123; <span class="comment">//父组件的data</span></span></span><br><span class="line"><span class="undefined">               </span></span><br><span class="line"><span class="undefined">            &#125;,</span></span><br><span class="line"><span class="undefined">            methods: &#123;</span></span><br><span class="line"><span class="javascript">                show: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; <span class="comment">// 定义父组件的show方法</span></span></span><br><span class="line"><span class="javascript">                    <span class="built_in">console</span>.log(<span class="string">'父组件提供的方法'</span>);</span></span><br><span class="line"><span class="undefined">                &#125;</span></span><br><span class="line"><span class="undefined">            &#125;,</span></span><br><span class="line"><span class="undefined">            components: &#123;</span></span><br><span class="line"><span class="javascript">                component1: &#123; <span class="comment">//将子组件的名称定义为 component1</span></span></span><br><span class="line"><span class="javascript">                    template: <span class="string">'#myTemplate'</span>,</span></span><br><span class="line"><span class="javascript">                    data() &#123; <span class="comment">// 子组件的data</span></span></span><br><span class="line"><span class="javascript">                        <span class="keyword">return</span> &#123;</span></span><br><span class="line"><span class="javascript">                            <span class="comment">// content: '子组件私有的数据 content'</span></span></span><br><span class="line"><span class="undefined">                        &#125;</span></span><br><span class="line"><span class="undefined">                    &#125;,</span></span><br><span class="line"><span class="javascript">                    props: [<span class="string">''</span>],</span></span><br><span class="line"><span class="undefined">                    directives: &#123;&#125;,</span></span><br><span class="line"><span class="undefined">                    filters: &#123;&#125;,</span></span><br><span class="line"><span class="undefined">                    components: &#123;&#125;,</span></span><br><span class="line"><span class="undefined">                    methods: &#123;</span></span><br><span class="line"><span class="undefined">                        childClick() &#123;</span></span><br><span class="line"><span class="undefined">              </span></span><br><span class="line"><span class="javascript">                            <span class="comment">//  emit 英文原意： 是触发，调用、发射。意思是，触发父组件的方法</span></span></span><br><span class="line"><span class="javascript">                            <span class="comment">// 【第三步】 在子组件的方法中，通过 emit 触发父组件的方法</span></span></span><br><span class="line"><span class="javascript">                            <span class="keyword">this</span>.$emit(<span class="string">'parent-show'</span>);</span></span><br><span class="line"><span class="undefined">                        &#125;</span></span><br><span class="line"><span class="undefined">                    &#125;</span></span><br><span class="line"><span class="undefined">                &#125;</span></span><br><span class="line"><span class="undefined">            &#125;</span></span><br><span class="line"><span class="undefined">        &#125;);</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>效果：（点击子组件，触发了父组件的方法）</p>
+<p>在这个过程中，我们对父组件传递的show的参数做一点点修改增加了两个参数，并实现将两个参数的值打印出来。</p>
+<p>所以，在调用$emit函数的时候，就必须多传入两个参数。这样，我们实现了在子组件内部将数据作为参数传入到父组件。</p>
+<p>代码如下：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"ie=edge"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"vue2.5.16.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"app"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">component1</span> @<span class="attr">parent-show</span>=<span class="string">'show'</span>&gt;</span><span class="tag">&lt;/<span class="name">component1</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- 定义子组件的模板 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">template</span> <span class="attr">id</span>=<span class="string">"myTemplate"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">h2</span> @<span class="attr">click</span>=<span class="string">"childClick"</span>&gt;</span>我是子组件，点击调用父组件的方法<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">        <span class="comment">// 创建 Vue 实例，得到 ViewModel</span></span></span><br><span class="line"><span class="javascript">        <span class="keyword">var</span> vm = <span class="keyword">new</span> Vue(&#123;</span></span><br><span class="line"><span class="javascript">            el: <span class="string">'#app'</span>,</span></span><br><span class="line"><span class="javascript">            data: &#123; <span class="comment">//父组件的data</span></span></span><br><span class="line"><span class="javascript">                <span class="comment">// msg: '父组件中的数据'</span></span></span><br><span class="line"><span class="undefined">            &#125;,</span></span><br><span class="line"><span class="javascript">            methods: &#123; <span class="comment">// 定义父组件的方法</span></span></span><br><span class="line"><span class="javascript">                show: <span class="function"><span class="keyword">function</span> (<span class="params">arg1, arg2</span>) </span>&#123; <span class="comment">//【第二步】父组件里放两个参数，这个两个参数就代表着子组件中的`child 123`、`child 789`</span></span></span><br><span class="line"><span class="javascript">                    <span class="built_in">console</span>.log(<span class="string">'父组件提供的方法'</span>);</span></span><br><span class="line"><span class="javascript">                    <span class="built_in">console</span>.log(<span class="string">'打印子组件传递过来的参数。参数一：'</span> + arg1 + <span class="string">'，参数二：'</span>+ arg2);</span></span><br><span class="line"><span class="undefined">                &#125;</span></span><br><span class="line"><span class="undefined">            &#125;,</span></span><br><span class="line"><span class="undefined">            components: &#123;</span></span><br><span class="line"><span class="javascript">                component1: &#123; <span class="comment">//将子组件的名称定义为 component1</span></span></span><br><span class="line"><span class="javascript">                    template: <span class="string">'#myTemplate'</span>,</span></span><br><span class="line"><span class="javascript">                    data() &#123; <span class="comment">// 子组件的data</span></span></span><br><span class="line"><span class="javascript">                        <span class="keyword">return</span> &#123;</span></span><br><span class="line"><span class="javascript">                            <span class="comment">// content: '子组件私有的数据 content'</span></span></span><br><span class="line"><span class="undefined">                        &#125;</span></span><br><span class="line"><span class="undefined">                    &#125;,</span></span><br><span class="line"><span class="javascript">                    props: [<span class="string">''</span>],</span></span><br><span class="line"><span class="undefined">                    directives: &#123;&#125;,</span></span><br><span class="line"><span class="undefined">                    filters: &#123;&#125;,</span></span><br><span class="line"><span class="undefined">                    components: &#123;&#125;,</span></span><br><span class="line"><span class="undefined">                    methods: &#123;</span></span><br><span class="line"><span class="undefined">                        childClick() &#123;</span></span><br><span class="line"><span class="javascript">                            <span class="comment">// 子组件如果要给父组件传递参数，在触发 emit 的时候，通过参数的形式带出去就可以了</span></span></span><br><span class="line"><span class="javascript">                            <span class="comment">// 【第一步】在子组件里，我们带两个参数出去，传给父组件</span></span></span><br><span class="line"><span class="javascript">                            <span class="keyword">this</span>.$emit(<span class="string">'parent-show'</span>, <span class="string">'child 123'</span>, <span class="string">'child 789'</span>);</span></span><br><span class="line"><span class="undefined">                        &#125;</span></span><br><span class="line"><span class="undefined">                    &#125;</span></span><br><span class="line"><span class="undefined">                &#125;</span></span><br><span class="line"><span class="undefined">            &#125;</span></span><br><span class="line"><span class="undefined">        &#125;);</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>我们还可以将子组件中的data数据传递给父组件，存放到父组件的data中，</p>
+<p>代码如下：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"ie=edge"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"vue2.5.16.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"app"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">component1</span> @<span class="attr">parent-show</span>=<span class="string">'show'</span>&gt;</span><span class="tag">&lt;/<span class="name">component1</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- 定义子组件的模板 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">template</span> <span class="attr">id</span>=<span class="string">"myTemplate"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">h2</span> @<span class="attr">click</span>=<span class="string">"childClick"</span>&gt;</span>我是子组件，点击调用父组件的方法<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">        <span class="comment">// 创建 Vue 实例，得到 ViewModel</span></span></span><br><span class="line"><span class="javascript">        <span class="keyword">var</span> vm = <span class="keyword">new</span> Vue(&#123;</span></span><br><span class="line"><span class="javascript">            el: <span class="string">'#app'</span>,</span></span><br><span class="line"><span class="javascript">            data: &#123; <span class="comment">//父组件的data</span></span></span><br><span class="line"><span class="javascript">                parentData: <span class="literal">null</span></span></span><br><span class="line"><span class="undefined">            &#125;,</span></span><br><span class="line"><span class="javascript">            methods: &#123; <span class="comment">// 定义父组件的方法</span></span></span><br><span class="line"><span class="javascript">                show: <span class="function"><span class="keyword">function</span> (<span class="params">arg</span>) </span>&#123; <span class="comment">//【第二步】父组件里放参数，这个参数就代表着子组件中的 child.data</span></span></span><br><span class="line"><span class="javascript">                    <span class="built_in">console</span>.log(<span class="string">'父组件提供的方法'</span>);</span></span><br><span class="line"><span class="javascript">                    <span class="keyword">this</span>.parentData = arg; <span class="comment">//将参数arg传递给父组件的data，也就达到了目的：子组件传递数据，赋值给父组件</span></span></span><br><span class="line"><span class="javascript">                    <span class="built_in">console</span>.log(<span class="string">'打印父组件的数据（这是子组件传过来的）：'</span>+ <span class="built_in">JSON</span>.stringify(<span class="keyword">this</span>.parentData));</span></span><br><span class="line"><span class="undefined">                &#125;</span></span><br><span class="line"><span class="undefined">            &#125;,</span></span><br><span class="line"><span class="undefined">            components: &#123;</span></span><br><span class="line"><span class="javascript">                component1: &#123; <span class="comment">//将子组件的名称定义为 component1</span></span></span><br><span class="line"><span class="javascript">                    template: <span class="string">'#myTemplate'</span>,</span></span><br><span class="line"><span class="javascript">                    data() &#123; <span class="comment">// 子组件的data</span></span></span><br><span class="line"><span class="javascript">                        <span class="keyword">return</span> &#123;</span></span><br><span class="line"><span class="javascript">                            childData: &#123; <span class="comment">//定义自组件的数据</span></span></span><br><span class="line"><span class="javascript">                                name: <span class="string">'smyhvae'</span>,</span></span><br><span class="line"><span class="undefined">                                age: 26</span></span><br><span class="line"><span class="undefined">                            &#125;</span></span><br><span class="line"><span class="undefined">                        &#125;</span></span><br><span class="line"><span class="undefined">                    &#125;,</span></span><br><span class="line"><span class="javascript">                    props: [<span class="string">''</span>],</span></span><br><span class="line"><span class="undefined">                    directives: &#123;&#125;,</span></span><br><span class="line"><span class="undefined">                    filters: &#123;&#125;,</span></span><br><span class="line"><span class="undefined">                    components: &#123;&#125;,</span></span><br><span class="line"><span class="undefined">                    methods: &#123;</span></span><br><span class="line"><span class="undefined">                        childClick() &#123;</span></span><br><span class="line"><span class="javascript">                            <span class="comment">// 子组件如果要给父组件传递参数，在触发 emit 的时候，通过参数的形式带出去就可以了</span></span></span><br><span class="line"><span class="javascript">                            <span class="comment">// 【第一步】在子组件里，通过传参的形式，把子组件的data，传给父组件</span></span></span><br><span class="line"><span class="javascript">                            <span class="keyword">this</span>.$emit(<span class="string">'parent-show'</span>, <span class="keyword">this</span>.childData);</span></span><br><span class="line"><span class="undefined">                        &#125;</span></span><br><span class="line"><span class="undefined">                    &#125;</span></span><br><span class="line"><span class="undefined">                &#125;</span></span><br><span class="line"><span class="undefined">            &#125;</span></span><br><span class="line"><span class="undefined">        &#125;);</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="在Vue中，通过-ref-属性获取DOM元素"><a href="#在Vue中，通过-ref-属性获取DOM元素" class="headerlink" title="在Vue中，通过 ref 属性获取DOM元素"></a>在Vue中，通过 ref 属性获取DOM元素</h2><p>我们当然可以使用JS原生的做法（document.getElementById）或者 jQuery 来获取DOM，但是这种做法却在无形中操作了DOM，在Vue框架中并不推荐这种做法。</p>
+<p>我们可以通过<code>ref</code>属性获取DOM元素。</p>
+<p><code>ref</code>的英文单词是<strong>reference</strong>，表示<strong>引用</strong>。我们平时可以经常看到控制台会报错<strong>referenceError</strong>的错误，就和引用类型的数据有关。</p>
+<p><strong>在Vue中，通过 ref 属性获取DOM元素</strong>的步骤：</p>
+<p>（1）第一步：在标签中给 DOM 元素设置 ref 属性。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">h3</span> <span class="attr">id</span>=<span class="string">"myH3"</span> <span class="attr">ref</span>=<span class="string">"myTitle"</span>&gt;</span> 今天天气太好了<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>（2）第二步：通过 this.this.$refs.xxx 获取 DOM 元素</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="keyword">this</span>.$refs.myTitle.innerText)</span><br></pre></td></tr></table></figure>
+<p><strong>举例如下</strong>：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"ie=edge"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"vue2.5.16.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"app"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">&lt;!-- 第一步：在标签中给 DOM 元素设置 ref 属性 --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">h3</span> <span class="attr">id</span>=<span class="string">"myH3"</span> <span class="attr">ref</span>=<span class="string">"myTitle"</span>&gt;</span> 今天天气太好了<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">value</span>=<span class="string">"按钮元素"</span> @<span class="attr">click</span>=<span class="string">"getElement"</span> <span class="attr">ref</span>=<span class="string">"myBtn"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="javascript">        <span class="keyword">var</span> login = &#123;</span></span><br><span class="line"><span class="xml">            template: '<span class="tag">&lt;<span class="name">h1</span>&gt;</span>登录组件<span class="tag">&lt;/<span class="name">h1</span>&gt;</span>',</span></span><br><span class="line"><span class="undefined">            data() &#123;</span></span><br><span class="line"><span class="javascript">                <span class="keyword">return</span> &#123;</span></span><br><span class="line"><span class="javascript">                    msg: <span class="string">'son msg'</span></span></span><br><span class="line"><span class="undefined">                &#125;</span></span><br><span class="line"><span class="undefined">            &#125;,</span></span><br><span class="line"><span class="undefined">            methods: &#123;</span></span><br><span class="line"><span class="undefined">                show() &#123;</span></span><br><span class="line"><span class="javascript">                    <span class="built_in">console</span>.log(<span class="string">'调用了子组件的方法'</span>)</span></span><br><span class="line"><span class="undefined">                &#125;</span></span><br><span class="line"><span class="undefined">            &#125;</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="javascript">        <span class="comment">// 创建 Vue 实例，得到 ViewModel</span></span></span><br><span class="line"><span class="javascript">        <span class="keyword">var</span> vm = <span class="keyword">new</span> Vue(&#123;</span></span><br><span class="line"><span class="javascript">            el: <span class="string">'#app'</span>,</span></span><br><span class="line"><span class="undefined">            data: &#123;&#125;,</span></span><br><span class="line"><span class="undefined">            methods: &#123;</span></span><br><span class="line"><span class="undefined">                getElement() &#123;</span></span><br><span class="line"><span class="javascript">                    <span class="comment">// 原生js获取DOM元素</span></span></span><br><span class="line"><span class="javascript">                    <span class="comment">// console.log(document.getElementById('myTitle').innerText)</span></span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="javascript">                    <span class="comment">// 第二步：通过 this.this.$refs.xxx 获取 DOM 元素</span></span></span><br><span class="line"><span class="javascript">                    <span class="built_in">console</span>.log(<span class="keyword">this</span>.$refs.myTitle.innerText)</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="undefined">                &#125;</span></span><br><span class="line"><span class="undefined">            &#125;,</span></span><br><span class="line"><span class="undefined">            components: &#123;</span></span><br><span class="line"><span class="undefined">                login</span></span><br><span class="line"><span class="undefined">            &#125;</span></span><br><span class="line"><span class="undefined">        &#125;);</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>运行上方代码，然后我们在控制台输入<code>vm</code>，就可以看到：</p>
+<p><img src="https://camo.githubusercontent.com/56140fc4fee1cdb5da336aa956e6267bec9af65d/687474703a2f2f696d672e736d79687661652e636f6d2f32303138303730315f313634302e706e67" alt="img"></p>
+<h3 id="使用-ref-属性获取整个子组件"><a href="#使用-ref-属性获取整个子组件" class="headerlink" title="使用 ref 属性获取整个子组件"></a>使用 ref 属性获取整个子组件</h3><p>根据上面的例子，我们可以得出<strong>规律</strong>：只要<code>ref</code>属性加在了DOM元素身上，我们就可以获取这个DOM元素。</p>
+<p>那我们可以通过ref属性获取整个<strong>Vue子组件</strong>吗？当然可以。这样做的意义是：**在父组件中通过<code>ref</code>属性拿到了子组件之后，就可以进一步拿到子组件中的data和method。</p>
+<p>举例：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"ie=edge"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"vue2.5.16.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"app"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">value</span>=<span class="string">"点击按钮"</span> @<span class="attr">click</span>=<span class="string">"getElement"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">login-component</span> <span class="attr">ref</span>=<span class="string">"loginTemplate"</span>&gt;</span><span class="tag">&lt;/<span class="name">login-component</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="javascript">        <span class="comment">// 创建 Vue 实例，得到 ViewModel</span></span></span><br><span class="line"><span class="javascript">        <span class="keyword">var</span> vm = <span class="keyword">new</span> Vue(&#123;</span></span><br><span class="line"><span class="javascript">            el: <span class="string">'#app'</span>,</span></span><br><span class="line"><span class="undefined">            data: &#123;&#125;,</span></span><br><span class="line"><span class="undefined">            methods: &#123;</span></span><br><span class="line"><span class="undefined">                getElement() &#123;</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="javascript">                    <span class="comment">//在父组件中，通过ref获取整个子组件，进而获取子组件的data</span></span></span><br><span class="line"><span class="javascript">                    <span class="built_in">console</span>.log(<span class="keyword">this</span>.$refs.loginTemplate.myData)</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="javascript">                    <span class="comment">//在父组件中，通过ref获取整个子组件，进而获取子组件的method</span></span></span><br><span class="line"><span class="javascript">                    <span class="keyword">this</span>.$refs.loginTemplate.showMethod()</span></span><br><span class="line"><span class="undefined">                &#125;</span></span><br><span class="line"><span class="undefined">            &#125;,</span></span><br><span class="line"><span class="undefined">            components: &#123;</span></span><br><span class="line"><span class="javascript">                <span class="string">'login-component'</span>: &#123;</span></span><br><span class="line"><span class="xml">                    template: '<span class="tag">&lt;<span class="name">h1</span>&gt;</span>登录组件<span class="tag">&lt;/<span class="name">h1</span>&gt;</span>',</span></span><br><span class="line"><span class="undefined">                    data() &#123;</span></span><br><span class="line"><span class="javascript">                        <span class="keyword">return</span> &#123;</span></span><br><span class="line"><span class="javascript">                            myData: <span class="string">'子组件的data'</span></span></span><br><span class="line"><span class="undefined">                        &#125;</span></span><br><span class="line"><span class="undefined">                    &#125;,</span></span><br><span class="line"><span class="undefined">                    methods: &#123;</span></span><br><span class="line"><span class="undefined">                        showMethod() &#123;</span></span><br><span class="line"><span class="javascript">                            <span class="built_in">console</span>.log(<span class="string">'调用子组件的method'</span>)</span></span><br><span class="line"><span class="undefined">                        &#125;</span></span><br><span class="line"><span class="undefined">                    &#125;</span></span><br><span class="line"><span class="undefined">                &#125;</span></span><br><span class="line"><span class="undefined">            &#125;</span></span><br><span class="line"><span class="undefined">        &#125;);</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>运行代码，点击按钮后，效果如下：</p>
+<p><a href="https://camo.githubusercontent.com/49a57cccd023100015599065f39503c546406880/687474703a2f2f696d672e736d79687661652e636f6d2f32303138303730315f313733352e706e67" rel="external nofollow noopener noreferrer" target="_blank"><img src="https://camo.githubusercontent.com/49a57cccd023100015599065f39503c546406880/687474703a2f2f696d672e736d79687661652e636f6d2f32303138303730315f313733352e706e67" alt="img"></a></p>
+<p>我们直接在控制台输入<code>vm</code>，可以看到：</p>
+<p><a href="https://camo.githubusercontent.com/6d6f1c71838fbfc034f4cb61bfb107957b545291/687474703a2f2f696d672e736d79687661652e636f6d2f32303138303730315f313734302e706e67" rel="external nofollow noopener noreferrer" target="_blank"><img src="https://camo.githubusercontent.com/6d6f1c71838fbfc034f4cb61bfb107957b545291/687474703a2f2f696d672e736d79687661652e636f6d2f32303138303730315f313734302e706e67" alt="img"></a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+      <div>
+        <div id="reward-container">
+  <div>不要投钱给我</div>
+  <button id="reward-button" disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    Donate
+  </button>
+  <div id="qr" style="display: none;">
+
+    
+      
+      
+        
+      
+      <div style="display: inline-block">
+        <img src="/images/wechatpay.jpg" alt="Mr.Chen WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/组件传值/" rel="tag"># 组件传值</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div class="social_share">
+            
+              <div>
+                
+
+<script src="//cdn.jsdelivr.net/npm/ilyabirman-likely@2/release/likely.js"></script>
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/ilyabirman-likely@2/release/likely.css">
+
+
+  
+
+
+<div class="likely">
+	
+ 	 	<div class="twitter">Tweet</div>
+	
+ 	 	<div class="facebook">Share</div>
+	
+ 	 	<div class="linkedin">Link</div>
+	
+ 	 	<div class="gplus">Plus</div>
+	
+ 	 	<div class="vkontakte">Share</div>
+	
+ 	 	<div class="odnoklassniki">Class</div>
+	
+ 	 	<div class="telegram">Send</div>
+	
+ 	 	<div class="whatsapp">Send</div>
+	
+ 	 	<div class="pinterest">Pin</div>
+	
+</div>
+
+              </div>
+            
+            
+            
+          </div>
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/10/网络之集线器、交换机和路由器异同之处/" rel="next" title="网络之集线器、交换机和路由器异同之处">
+                <i class="fa fa-chevron-left"></i> 网络之集线器、交换机和路由器异同之处
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/06/29/XDebug断点调试的工作原理/" rel="prev" title="XDebug断点调试的工作原理">
+                XDebug断点调试的工作原理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="gitalk-container">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+              
+                 <img class="site-author-image" itemprop="image" src="/images/myimg.jpg" alt="Mr.Chen">
+              
+              <p class="site-author-name" itemprop="name">Mr.Chen</p>
+              <div class="site-description motion-element" itemprop="description">鹿有森林，鲸有深海</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives">
+                
+                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-name">categories</span>
+                  
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">30</span>
+                    <span class="site-state-item-name">tags</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/8bun" title="GitHub &rarr; https://github.com/8bun" rel="external nofollow noopener noreferrer" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://blog.csdn.net/DYD850804" title="CSDN &rarr; https://blog.csdn.net/DYD850804" rel="external nofollow noopener noreferrer" target="_blank"><i class="fa fa-fw fa-CSDN"></i>CSDN</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://stackoverflow.com/users/10155825/Jack" title="StackOverflow &rarr; https://stackoverflow.com/users/10155825/Jack" rel="external nofollow noopener noreferrer" target="_blank"><i class="fa fa-fw fa-stack-overflow"></i>StackOverflow</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#组件"><span class="nav-number">1.</span> <span class="nav-text">组件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#父子组件"><span class="nav-number">2.</span> <span class="nav-text">父子组件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#兄弟组件"><span class="nav-number">2.0.1.</span> <span class="nav-text">兄弟组件</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#Prop"><span class="nav-number">3.</span> <span class="nav-text">Prop</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#父组件将方法传递给子组件"><span class="nav-number">4.</span> <span class="nav-text">父组件将方法传递给子组件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在Vue中，通过-ref-属性获取DOM元素"><span class="nav-number">5.</span> <span class="nav-text">在Vue中，通过 ref 属性获取DOM元素</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-ref-属性获取整个子组件"><span class="nav-number">5.1.</span> <span class="nav-text">使用 ref 属性获取整个子组件</span></a></li></ol></li></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+    <div id="sidebar-dimmer"></div>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mr.Chen</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="external nofollow noopener noreferrer" target="_blank">Hexo</a> v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="external nofollow noopener noreferrer" target="_blank">NexT.Gemini</a> v7.1.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="Total Visitors">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="Total Views">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+  </div>
+
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.0"></script>
+
+  <script src="/js/motion.js?v=7.1.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.0"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.0"></script>
+<script src="/js/post-details.js?v=7.1.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+    
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+  <script src="/js/md5.min.js"></script>
+   <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: 'db37fc5f69ac01bd0cec',
+          clientSecret: '60138b57b65161bd4bec11c3f9cf3b8db5f0291d',
+          repo: 'gitalk',
+          owner: '8bun',
+          admin: ['8bun'],
+          id: md5(location.pathname),
+          labels: 'gitalk'.split(',').filter(l => l),
+          perPage: 15,
+          pagerDirection: 'last',
+          createIssueManually: true,
+          distractionFreeMode: false
+        })
+        gitalk.render('gitalk-container')
+       </script>
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+<script>
+  $('.highlight').each(function(i, e) {
+    var $wrap = $('<div>').addClass('highlight-wrap');
+    $(e).after($wrap);
+    $wrap.append($('<button>').addClass('copy-btn').append('Copy').on('click', function(e) {
+      var code = $(this).parent().find('.code').find('.line').map(function(i, e) {
+        return $(e).text();
+      }).toArray().join('\n');
+      var ta = document.createElement('textarea');
+      var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+      ta.style.top = yPosition + 'px'; // Prevent page scroll
+      ta.style.position = 'absolute';
+      ta.style.opacity = '0';
+      ta.readOnly = true;
+      ta.value = code;
+      document.body.appendChild(ta);
+      ta.select();
+      ta.setSelectionRange(0, code.length);
+      ta.readOnly = false;
+      var result = document.execCommand('copy');
+      
+      ta.blur(); // For iOS
+      $(this).blur();
+    })).on('mouseleave', function(e) {
+      var $b = $(this).find('.copy-btn');
+      setTimeout(function() {
+        $b.text('Copy');
+      }, 300);
+    }).append(e);
+  })
+</script>
+
+
+  
+
+  
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/assets/tororo.model.json"},"display":{"position":"right","width":200,"height":350},"mobile":{"show":true},"react":{"opacity":0.85},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

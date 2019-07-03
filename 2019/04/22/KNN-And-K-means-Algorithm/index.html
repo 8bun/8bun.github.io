@@ -1,0 +1,1631 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-32x32-next.ico?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.ico?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-32x32-next.ico?v=7.1.0">
+
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.1.0',
+    sidebar: {"position":"left","display":"always","offset":12,"onmobile":true,"dimmer":true},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="K-means方法是一种非监督学习的算法，它解决的是聚类问题。 1、算法简介：K-means方法是聚类中的经典算法，数据挖掘十大经典算法之一；算法接受参数k,然后将事先输入的n个数据对象划分为k个聚类以便使得所获得的聚类满足聚类中的对象相似度较高，而不同聚类中的对象相似度较小。 2、算法思想：以空间中k个点为中心进行聚类，对最靠近他们的对象归类，通过迭代的方法，逐次更新各聚类中心的值，直到得到最好">
+<meta name="keywords" content="KNN,K-means,聚类,分类">
+<meta property="og:type" content="article">
+<meta property="og:title" content="KNN And K-means Algorithm">
+<meta property="og:url" content="https://8bun.github.io/2019/04/22/KNN-And-K-means-Algorithm/index.html">
+<meta property="og:site_name" content="MrChen">
+<meta property="og:description" content="K-means方法是一种非监督学习的算法，它解决的是聚类问题。 1、算法简介：K-means方法是聚类中的经典算法，数据挖掘十大经典算法之一；算法接受参数k,然后将事先输入的n个数据对象划分为k个聚类以便使得所获得的聚类满足聚类中的对象相似度较高，而不同聚类中的对象相似度较小。 2、算法思想：以空间中k个点为中心进行聚类，对最靠近他们的对象归类，通过迭代的方法，逐次更新各聚类中心的值，直到得到最好">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://img-blog.csdn.net/20170213162451415?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvc2luYXRfMzU1MTIyNDU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="https://img-blog.csdn.net/20170213174603041?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvc2luYXRfMzU1MTIyNDU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="https://img-blog.csdn.net/20170213175650062?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvc2luYXRfMzU1MTIyNDU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://blog.topspeedsnail.com/wp-content/uploads/2016/11/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7-2016-11-10-%E4%B8%8B%E5%8D%889.38.13.png">
+<meta property="og:image" content="https://img-blog.csdn.net/20131024142609828">
+<meta property="og:updated_time" content="2019-04-23T14:13:58.767Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="KNN And K-means Algorithm">
+<meta name="twitter:description" content="K-means方法是一种非监督学习的算法，它解决的是聚类问题。 1、算法简介：K-means方法是聚类中的经典算法，数据挖掘十大经典算法之一；算法接受参数k,然后将事先输入的n个数据对象划分为k个聚类以便使得所获得的聚类满足聚类中的对象相似度较高，而不同聚类中的对象相似度较小。 2、算法思想：以空间中k个点为中心进行聚类，对最靠近他们的对象归类，通过迭代的方法，逐次更新各聚类中心的值，直到得到最好">
+<meta name="twitter:image" content="https://img-blog.csdn.net/20170213162451415?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvc2luYXRfMzU1MTIyNDU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="MrChen" type="application/atom+xml">
+
+
+
+  
+  
+  <link rel="canonical" href="https://8bun.github.io/2019/04/22/KNN-And-K-means-Algorithm/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>KNN And K-means Algorithm | MrChen</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+  <!-- 音乐播放器 -->
+  <link rel="stylesheet" href="/dist/APlayer.min.css">
+  <div id="aplayer"></div>
+  <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+  <script type="text/javascript" src="/dist/music.js"></script>
+  <!-- Alt+Z:打开夜间模式
+  Alt+X:关闭
+  Alt+↑:增加亮度
+  Alt+↓:降低亮度 -->
+  <script type="text/javascript" src="/js/night_mode.js"></script>
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">MrChen</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">行者</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-首页">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-读书">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/ReadBook/" rel="section"><i class="menu-item-icon fa fa-fw fa-book"></i> <br>读书</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-标签">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-分类">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-历程">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>历程</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-关于">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>Search</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://8bun.github.io/2019/04/22/KNN-And-K-means-Algorithm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Mr.Chen">
+      <meta itemprop="description" content="鹿有森林，鲸有深海">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MrChen">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">KNN And K-means Algorithm
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-04-22 15:46:11" itemprop="dateCreated datePublished" datetime="2019-04-22T15:46:11+08:00">2019-04-22</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-04-23 22:13:58" itemprop="dateModified" datetime="2019-04-23T22:13:58+08:00">2019-04-23</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/机器学习/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             Views:  
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><strong>K-means方法是一种非监督学习的算法，它解决的是聚类问题。</strong></p>
+<p>1、算法简介：K-means方法是聚类中的经典算法，数据挖掘十大经典算法之一；算法接受参数k,然后将事先输入的n个数据对象划分为k个聚类以便使得所获得的聚类满足聚类中的对象相似度较高，而不同聚类中的对象相似度较小。</p>
+<p>2、算法思想：以空间中k个点为中心进行聚类，对最靠近他们的对象归类，通过迭代的方法，逐次更新各聚类中心的值，直到得到最好的聚类结果。</p>
+<p>3、算法描述：</p>
+<a id="more"></a>
+<p>（1）适当选择c个类的初始中心；<br>（2）在第k次迭代中，对任意一个样本，求其到c各中心的距离，将该样本归到距离最短的那个中心所在的类；<br>（3）利用均值等方法更新该类的中心值；<br>（4）对于所有的C个聚类中心，如果利用（2）（3）的迭代法更新后，值保持不变，则迭代结束；否则继续迭代。</p>
+<p>4、算法举例：</p>
+<p>我们假设药物A、B、C、D有两个特征值，分别是药物重量以及PH值。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>药物名称</th>
+<th>药物重量</th>
+<th>药物PH值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>B</td>
+<td>2</td>
+<td>1</td>
+</tr>
+<tr>
+<td>C</td>
+<td>4</td>
+<td>3</td>
+</tr>
+<tr>
+<td>D</td>
+<td>5</td>
+<td>4</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>现在我们要对这四个药物进行聚类，已知我们要分成两类，那么我们该怎么做呢？</p>
+<h5 id="首先我们把上面的数据画到二位坐标系当中-A-1-1-B-2-1-C-4-3-D-5-4"><a href="#首先我们把上面的数据画到二位坐标系当中-A-1-1-B-2-1-C-4-3-D-5-4" class="headerlink" title="首先我们把上面的数据画到二位坐标系当中     A(1,1),B(2,1),C(4,3),D(5,4):"></a>首先我们把上面的数据画到二位坐标系当中     A(1,1),B(2,1),C(4,3),D(5,4):</h5><p><img src="https://img-blog.csdn.net/20170213162451415?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvc2luYXRfMzU1MTIyNDU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="è¿éåå¾çæè¿°"></p>
+<h5 id="初始时，由于假设K-2-表示将所有数据集分为两组，我们称之为聚类-我们先假设药物A为聚类1的中心点，B为聚类2的中心点。"><a href="#初始时，由于假设K-2-表示将所有数据集分为两组，我们称之为聚类-我们先假设药物A为聚类1的中心点，B为聚类2的中心点。" class="headerlink" title="初始时，由于假设K=2 (表示将所有数据集分为两组，我们称之为聚类) 我们先假设药物A为聚类1的中心点，B为聚类2的中心点。"></a>初始时，由于假设K=2 (表示将所有数据集分为两组，我们称之为聚类) 我们先假设药物A为聚类1的中心点，B为聚类2的中心点。</h5><h5 id="那么初始时的中心坐标分别为c1-1-1-c2-2-1-c1-1-1-c2-2-1-，矩阵D的第一行代表各个点到中心点c1的距离，第二行代表各个点到中心点c2的距离；那么初始矩阵D0表示成如下："><a href="#那么初始时的中心坐标分别为c1-1-1-c2-2-1-c1-1-1-c2-2-1-，矩阵D的第一行代表各个点到中心点c1的距离，第二行代表各个点到中心点c2的距离；那么初始矩阵D0表示成如下：" class="headerlink" title="那么初始时的中心坐标分别为c1=(1,1),c2=(2,1)c1=(1,1),c2=(2,1)，矩阵D的第一行代表各个点到中心点c1的距离，第二行代表各个点到中心点c2的距离；那么初始矩阵D0表示成如下："></a>那么初始时的中心坐标分别为c1=(1,1),c2=(2,1)c1=(1,1),c2=(2,1)，矩阵D的第一行代表各个点到中心点c1的距离，第二行代表各个点到中心点c2的距离；那么初始矩阵D0表示成如下：</h5><script type="math/tex; mode=display">
+D0 = \left[ \begin{matrix} 0 & 1 & 3.61 & 5\\ 1 & 0 & 2.83 & 4.24 \end{matrix} \right]</script><h5 id="矩阵-D0向我们展示了除了中心点之外的其他所有点距离K个中心点的距离大小，每个点距离各个中心点的距离都不尽相同。所谓近水楼台先得月，所以将点归入离点最近的中心点一类。以后每开始一次的迭代，都会重新算出每个聚类的中心点，然后根据相同的操作进行点的归类，直到聚类中心不再进行大范围移动或者聚类次数达到要求为止。"><a href="#矩阵-D0向我们展示了除了中心点之外的其他所有点距离K个中心点的距离大小，每个点距离各个中心点的距离都不尽相同。所谓近水楼台先得月，所以将点归入离点最近的中心点一类。以后每开始一次的迭代，都会重新算出每个聚类的中心点，然后根据相同的操作进行点的归类，直到聚类中心不再进行大范围移动或者聚类次数达到要求为止。" class="headerlink" title="矩阵 D0向我们展示了除了中心点之外的其他所有点距离K个中心点的距离大小，每个点距离各个中心点的距离都不尽相同。所谓近水楼台先得月，所以将点归入离点最近的中心点一类。以后每开始一次的迭代，都会重新算出每个聚类的中心点，然后根据相同的操作进行点的归类，直到聚类中心不再进行大范围移动或者聚类次数达到要求为止。"></a>矩阵 D0向我们展示了除了中心点之外的其他所有点距离K个中心点的距离大小，每个点距离各个中心点的距离都不尽相同。所谓近水楼台先得月，所以将点归入离点最近的中心点一类。以后每开始一次的迭代，都会重新算出每个聚类的中心点，然后根据相同的操作进行点的归类，直到聚类中心不再进行大范围移动或者聚类次数达到要求为止。</h5><h5 id="矩阵G0代表样本应该归属于哪个聚类，第一行代表各个点是否属于中心c1所在的类（0代表不在，1代表在），第二行代表各个点是否属于中心c2所在的类（0代表不在，1代表在）；那么此时G0表示成如下："><a href="#矩阵G0代表样本应该归属于哪个聚类，第一行代表各个点是否属于中心c1所在的类（0代表不在，1代表在），第二行代表各个点是否属于中心c2所在的类（0代表不在，1代表在）；那么此时G0表示成如下：" class="headerlink" title="矩阵G0代表样本应该归属于哪个聚类，第一行代表各个点是否属于中心c1所在的类（0代表不在，1代表在），第二行代表各个点是否属于中心c2所在的类（0代表不在，1代表在）；那么此时G0表示成如下："></a>矩阵G0代表样本应该归属于哪个聚类，第一行代表各个点是否属于中心c1所在的类（0代表不在，1代表在），第二行代表各个点是否属于中心c2所在的类（0代表不在，1代表在）；那么此时G0表示成如下：</h5><script type="math/tex; mode=display">
+G0 = \left[ \begin{matrix} 1 & 0 & 0 & 0\\ 0 & 1 & 1 & 1 \end{matrix} \right]</script><h5 id="由矩阵D0可知A药物属于一个类，B、C、D属于一类；"><a href="#由矩阵D0可知A药物属于一个类，B、C、D属于一类；" class="headerlink" title="由矩阵D0可知A药物属于一个类，B、C、D属于一类；"></a>由矩阵D0可知A药物属于一个类，B、C、D属于一类；</h5><h5 id="然后，利用均值等方法更新该类的中心值。"><a href="#然后，利用均值等方法更新该类的中心值。" class="headerlink" title="然后，利用均值等方法更新该类的中心值。"></a>然后，利用均值等方法更新该类的中心值。</h5><h5 id="c1-（1-1）"><a href="#c1-（1-1）" class="headerlink" title="c1=（1,1）"></a>c1=（1,1）</h5><h5 id="c2-（-2-4-5-3-1-3-4-3）-13-3-8-3"><a href="#c2-（-2-4-5-3-1-3-4-3）-13-3-8-3" class="headerlink" title="c2=（(2+4+5)/3,(1+3+4)/3）= (13/3,8/3)"></a>c2=（(2+4+5)/3,(1+3+4)/3）= (13/3,8/3)</h5><p><img src="https://img-blog.csdn.net/20170213174603041?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvc2luYXRfMzU1MTIyNDU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="è¿éåå¾çæè¿°"></p>
+<h5 id="上图是更新后的坐标图，对应的中心点也发生了变化。"><a href="#上图是更新后的坐标图，对应的中心点也发生了变化。" class="headerlink" title="上图是更新后的坐标图，对应的中心点也发生了变化。"></a>上图是更新后的坐标图，对应的中心点也发生了变化。</h5><h5 id="因为中心点跟上次不一样了，所以我们又可以对样本点进行重新划分。划分的方法还是跟以前一模一样，我们先计算出矩阵D1表示成如下："><a href="#因为中心点跟上次不一样了，所以我们又可以对样本点进行重新划分。划分的方法还是跟以前一模一样，我们先计算出矩阵D1表示成如下：" class="headerlink" title="因为中心点跟上次不一样了，所以我们又可以对样本点进行重新划分。划分的方法还是跟以前一模一样，我们先计算出矩阵D1表示成如下："></a>因为中心点跟上次不一样了，所以我们又可以对样本点进行重新划分。划分的方法还是跟以前一模一样，我们先计算出矩阵D1表示成如下：</h5><script type="math/tex; mode=display">
+D1 = \left[ \begin{matrix} 0 & 1 & 3.61 & 5\\ 3.14 & 2.36 & 0.47 & 1.89 \end{matrix} \right]</script><h5 id="此时G1表示成如下："><a href="#此时G1表示成如下：" class="headerlink" title="此时G1表示成如下："></a>此时G1表示成如下：</h5><script type="math/tex; mode=display">
+G1 = \left[ \begin{matrix} 1 & 1 & 0 & 0\\ 0 & 0 & 1 & 1     \end{matrix} \right]</script><h5 id="由矩阵G1可知A、B药物属于一个类，C、D属于一类；"><a href="#由矩阵G1可知A、B药物属于一个类，C、D属于一类；" class="headerlink" title="由矩阵G1可知A、B药物属于一个类，C、D属于一类；"></a>由矩阵G1可知A、B药物属于一个类，C、D属于一类；</h5><h5 id="然后，利用均值等方法再次更新该类的中心值。"><a href="#然后，利用均值等方法再次更新该类的中心值。" class="headerlink" title="然后，利用均值等方法再次更新该类的中心值。"></a>然后，利用均值等方法再次更新该类的中心值。</h5><h5 id="c1-（-1-2-2-1-1-2）-1-5-1"><a href="#c1-（-1-2-2-1-1-2）-1-5-1" class="headerlink" title="c1=（(1+2)/2,(1+1)/2）=(1.5,1)"></a>c1=（(1+2)/2,(1+1)/2）=(1.5,1)</h5><h5 id="c2-（-4-5-2-3-4-2）-4-5-3-5"><a href="#c2-（-4-5-2-3-4-2）-4-5-3-5" class="headerlink" title="c2=（(4+5)/2,(3+4)/2）=(4.5,3.5)"></a>c2=（(4+5)/2,(3+4)/2）=(4.5,3.5)</h5><p><img src="https://img-blog.csdn.net/20170213175650062?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvc2luYXRfMzU1MTIyNDU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="è¿éåå¾çæè¿°"></p>
+<p>上图是更新后的坐标图，对应的中心点也发生了变化。</p>
+<p>因为中心点跟上次不一样了，所以我们又可以对样本点进行重新划分。划分的方法还是跟以前一模一样，我们先计算出矩阵D2表示成如下： </p>
+<script type="math/tex; mode=display">
+D2 = \left[ \begin{matrix} 0.5 & 0.5 & 3.20 & 4.61\\ 4.30 & 3.54 & 0.71 & 0.71 
+\end{matrix} \right]</script><p>此时G2表示成如下： </p>
+<script type="math/tex; mode=display">
+G2 = \left[ \begin{matrix} 1 & 1 & 0 & 0\\ 0 & 0 & 1 & 1 
+\end{matrix} \right]</script><h5 id="由矩阵G2可知A、B药物属于一个类，C、D属于一类；"><a href="#由矩阵G2可知A、B药物属于一个类，C、D属于一类；" class="headerlink" title="由矩阵G2可知A、B药物属于一个类，C、D属于一类；"></a>由矩阵G2可知A、B药物属于一个类，C、D属于一类；</h5><h5 id="然后，利用均值等方法再次更新该类的中心值。-1"><a href="#然后，利用均值等方法再次更新该类的中心值。-1" class="headerlink" title="然后，利用均值等方法再次更新该类的中心值。"></a>然后，利用均值等方法再次更新该类的中心值。</h5><h5 id="c1-（-1-2-2-1-1-2）-1-5-1-1"><a href="#c1-（-1-2-2-1-1-2）-1-5-1-1" class="headerlink" title="c1=（(1+2)/2,(1+1)/2）=(1.5,1)"></a>c1=（(1+2)/2,(1+1)/2）=(1.5,1)</h5><h5 id="c2-（-4-5-2-3-4-2）-4-5-3-5-1"><a href="#c2-（-4-5-2-3-4-2）-4-5-3-5-1" class="headerlink" title="c2=（(4+5)/2,(3+4)/2）=(4.5,3.5)"></a>c2=（(4+5)/2,(3+4)/2）=(4.5,3.5)</h5><h5 id="因为对应的中心点并没有发生变化，所以迭代停止，计算完毕。"><a href="#因为对应的中心点并没有发生变化，所以迭代停止，计算完毕。" class="headerlink" title="因为对应的中心点并没有发生变化，所以迭代停止，计算完毕。"></a>因为对应的中心点并没有发生变化，所以迭代停止，计算完毕。</h5><p><strong>本算法的时间复杂度：O(tkmn)，其中，t为迭代次数，k为簇的数目，m为记录数，n为维数；</strong></p>
+<p><strong>空间复杂度：O((m+k)n)，其中，k为簇的数目，m为记录数，n为维数。</strong></p>
+<p><strong>适用范围:</strong></p>
+<h4 id="K-means算法试图找到使平凡误差准则函数最小的簇。当潜在的簇形状是凸面的，簇与簇之间区别较明显，且簇大小相近时，其聚类结果较理想。前面提到，该算法时间复杂度为O-tkmn-，与样本数量线性相关，所以，对于处理大数据集合，该算法非常高效，且伸缩性较好。但该算法除了要事先确定簇数K和对初始聚类中心敏感外，经常以局部最优结束，同时对“噪声”和孤立点敏感，并且该方法不适于发现非凸面形状的簇或大小差别很大的簇。"><a href="#K-means算法试图找到使平凡误差准则函数最小的簇。当潜在的簇形状是凸面的，簇与簇之间区别较明显，且簇大小相近时，其聚类结果较理想。前面提到，该算法时间复杂度为O-tkmn-，与样本数量线性相关，所以，对于处理大数据集合，该算法非常高效，且伸缩性较好。但该算法除了要事先确定簇数K和对初始聚类中心敏感外，经常以局部最优结束，同时对“噪声”和孤立点敏感，并且该方法不适于发现非凸面形状的簇或大小差别很大的簇。" class="headerlink" title="K-means算法试图找到使平凡误差准则函数最小的簇。当潜在的簇形状是凸面的，簇与簇之间区别较明显，且簇大小相近时，其聚类结果较理想。前面提到，该算法时间复杂度为O(tkmn)，与样本数量线性相关，所以，对于处理大数据集合，该算法非常高效，且伸缩性较好。但该算法除了要事先确定簇数K和对初始聚类中心敏感外，经常以局部最优结束，同时对“噪声”和孤立点敏感，并且该方法不适于发现非凸面形状的簇或大小差别很大的簇。"></a>K-means算法试图找到使平凡误差准则函数最小的簇。当潜在的簇形状是凸面的，簇与簇之间区别较明显，且簇大小相近时，其聚类结果较理想。前面提到，该算法时间复杂度为O(tkmn)，与样本数量线性相关，所以，对于处理大数据集合，该算法非常高效，且伸缩性较好。但该算法除了要事先确定簇数K和对初始聚类中心敏感外，经常以局部最优结束，同时对“噪声”和孤立点敏感，并且该方法不适于发现非凸面形状的簇或大小差别很大的簇。</h4><p><strong>缺点：</strong></p>
+<h4 id="1、聚类中心的个数K-需要事先给定，但在实际中这个-K-值的选定是非常难以估计的，很多时候，事先并不知道给定的数据集应该分成多少个类别才最合适；"><a href="#1、聚类中心的个数K-需要事先给定，但在实际中这个-K-值的选定是非常难以估计的，很多时候，事先并不知道给定的数据集应该分成多少个类别才最合适；" class="headerlink" title="1、聚类中心的个数K 需要事先给定，但在实际中这个 K 值的选定是非常难以估计的，很多时候，事先并不知道给定的数据集应该分成多少个类别才最合适；"></a>1、聚类中心的个数K 需要事先给定，但在实际中这个 K 值的选定是非常难以估计的，很多时候，事先并不知道给定的数据集应该分成多少个类别才最合适；</h4><h4 id="2、K-means需要人为地确定初始聚类中心，不同的初始聚类中心可能导致完全不同的聚类结果。（可以使用K-means-算法来解决）"><a href="#2、K-means需要人为地确定初始聚类中心，不同的初始聚类中心可能导致完全不同的聚类结果。（可以使用K-means-算法来解决）" class="headerlink" title="2、K-means需要人为地确定初始聚类中心，不同的初始聚类中心可能导致完全不同的聚类结果。（可以使用K-means++算法来解决）"></a>2、K-means需要人为地确定初始聚类中心，不同的初始聚类中心可能导致完全不同的聚类结果。（可以使用K-means++算法来解决）</h4><p><strong>K-means 算法代码实现：</strong> </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">K_Means</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="comment"># k是分组数；tolerance为'中心点误差'；max_iter是最大迭代次数</span></span><br><span class="line">    <span class="comment"># 类构造方法</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, k=<span class="number">2</span>, tolerance=<span class="number">0.0001</span>, max_iter=<span class="number">300</span>)</span>:</span></span><br><span class="line">        self.k_ = k</span><br><span class="line">        self.tolerance_ = tolerance</span><br><span class="line">        self.max_iter_ = max_iter</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fit</span><span class="params">(self, data)</span>:</span></span><br><span class="line">        self.centers_ = &#123;&#125;  <span class="comment"># 中心点集合</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(self.k_):</span><br><span class="line">            self.centers_[i] = data[i]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(self.max_iter_):</span><br><span class="line">            self.clf_ = &#123;&#125; <span class="comment"># 定义为字典，每一类都有一个名称</span></span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(self.k_):</span><br><span class="line">                self.clf_[i] = []  <span class="comment"># 聚类字典，根据k组数确定最大长度</span></span><br><span class="line"></span><br><span class="line">            <span class="comment"># print("此时的中心点集合: ",self.centers_)</span></span><br><span class="line"></span><br><span class="line">            <span class="comment"># 遍历样本所有点</span></span><br><span class="line">            <span class="keyword">for</span> feature <span class="keyword">in</span> data:</span><br><span class="line">                <span class="comment"># distances = [np.linalg.norm(feature-self.centers[center]) for center in self.centers]</span></span><br><span class="line">                distances = []</span><br><span class="line">                <span class="comment"># 对每个样本点，遍历所有中心点，计算它与每个聚类的中心的距离，然后取最小距离进行归类</span></span><br><span class="line">                <span class="keyword">for</span> center <span class="keyword">in</span> self.centers_:</span><br><span class="line">                    <span class="comment"># 欧拉距离</span></span><br><span class="line">                    <span class="comment"># 可使用np.sqrt(np.sum((features-self.centers_[center])**2))计算距离</span></span><br><span class="line">                    <span class="comment"># norm()可以直接计算出距离</span></span><br><span class="line">                    distances.append(np.linalg.norm(feature - self.centers_[center]))</span><br><span class="line">                <span class="comment"># 在distances中取最小距离</span></span><br><span class="line">                classification = distances.index(min(distances)) <span class="comment"># 返回最小距离在distances数组中的下标</span></span><br><span class="line">                self.clf_[classification].append(feature) <span class="comment"># 将点加入clf_数组相应位置</span></span><br><span class="line"></span><br><span class="line">            <span class="comment"># print("分组情况:",self.clf_)</span></span><br><span class="line">            prev_centers = dict(self.centers_)  <span class="comment"># 复制centers_字典</span></span><br><span class="line">            <span class="comment"># print(prev_centers) # &#123;0: array([1., 2.]), 1: array([1.5, 1.8])&#125; → &#123;0: array([1., 2.]), 1: array([4.9 , 5.88])&#125;</span></span><br><span class="line">            <span class="comment"># print(self.clf_)</span></span><br><span class="line">            <span class="comment"># &#123;0: [array([1., 2.])],1: [array([1.5, 1.8]), array([5., 8.]), array([8., 8.]), array([1., 0.6]), array([9., 11.])]&#125;</span></span><br><span class="line">            <span class="comment"># &#123;0: [array([1., 2.]), array([1.5, 1.8]), array([1., 0.6])],1: [array([5., 8.]), array([8., 8.]), array([9., 11.])]&#125;</span></span><br><span class="line">            <span class="comment"># &#123;0: [array([1., 2.]), array([1.5, 1.8]), array([1., 0.6])],1: [array([5., 8.]), array([8., 8.]), array([9., 11.])]&#125;</span></span><br><span class="line">            <span class="comment"># 根据聚类名遍历每个聚类</span></span><br><span class="line">            <span class="keyword">for</span> c <span class="keyword">in</span> self.clf_:</span><br><span class="line">                <span class="comment"># print(c)  0 1</span></span><br><span class="line">                <span class="comment"># 取每个聚类的均值作为正在遍历的类的新中心点，axis=0为二维数组纵向取均值</span></span><br><span class="line">                self.centers_[c] = np.average(self.clf_[c], axis=<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">            <span class="comment"># '中心点'是否在误差范围</span></span><br><span class="line">            optimized = <span class="literal">True</span></span><br><span class="line">            <span class="comment"># 根据聚类名遍历每个聚类</span></span><br><span class="line">            <span class="comment"># print("prev")</span></span><br><span class="line">            <span class="comment"># print(prev_centers)</span></span><br><span class="line">            <span class="comment"># # print("centers")</span></span><br><span class="line">            <span class="comment"># print(self.centers_)</span></span><br><span class="line">            <span class="keyword">for</span> center <span class="keyword">in</span> self.centers_:</span><br><span class="line">                org_centers = prev_centers[center]</span><br><span class="line">                cur_centers = self.centers_[center]</span><br><span class="line">                <span class="comment"># 比较类上次的中心点以及本次计算的中心点的差值，计算偏差</span></span><br><span class="line">                <span class="keyword">if</span> np.sum((cur_centers - org_centers) / org_centers * <span class="number">100.0</span>) &gt; self.tolerance_:</span><br><span class="line">                    optimized = <span class="literal">False</span></span><br><span class="line">            <span class="keyword">if</span> optimized:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 预测数据所属的聚类，根据所测点距中心点的大小进行判定</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">predict</span><span class="params">(self, p_data)</span>:</span></span><br><span class="line">        distances = [np.linalg.norm(p_data - self.centers_[center]) <span class="keyword">for</span> center <span class="keyword">in</span> self.centers_]</span><br><span class="line">        index = distances.index(min(distances))</span><br><span class="line">        <span class="keyword">return</span> index</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line"></span><br><span class="line">    x = np.array([[<span class="number">1</span>, <span class="number">2</span>], [<span class="number">1.5</span>, <span class="number">1.8</span>], [<span class="number">5</span>, <span class="number">8</span>], [<span class="number">8</span>, <span class="number">8</span>], [<span class="number">1</span>, <span class="number">0.6</span>], [<span class="number">9</span>, <span class="number">11</span>]])</span><br><span class="line"></span><br><span class="line">    k_means = K_Means(k=<span class="number">2</span>)</span><br><span class="line">    k_means.fit(x)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 打印最终的中心点</span></span><br><span class="line">    <span class="comment"># print(k_means.centers_)  # &#123;0: array([1.16666667, 1.46666667]), 1: array([7.33333333, 9.        ])&#125;</span></span><br><span class="line">    <span class="keyword">for</span> center <span class="keyword">in</span> k_means.centers_:</span><br><span class="line">        <span class="comment"># 将最终的中心点使用五角星标志出来</span></span><br><span class="line">        pyplot.scatter(k_means.centers_[center][<span class="number">0</span>], k_means.centers_[center][<span class="number">1</span>], marker=<span class="string">'*'</span>, s=<span class="number">150</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 遍历每个聚类的所有点</span></span><br><span class="line">    <span class="keyword">for</span> cat <span class="keyword">in</span> k_means.clf_:</span><br><span class="line">        <span class="keyword">for</span> point <span class="keyword">in</span> k_means.clf_[cat]:</span><br><span class="line">            pyplot.scatter(point[<span class="number">0</span>], point[<span class="number">1</span>], c=(<span class="string">'r'</span> <span class="keyword">if</span> cat == <span class="number">0</span> <span class="keyword">else</span> <span class="string">'b'</span>))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 预测数据</span></span><br><span class="line">    predict = [[<span class="number">2</span>, <span class="number">1</span>], [<span class="number">6</span>, <span class="number">9</span>]]</span><br><span class="line">    <span class="keyword">for</span> feature <span class="keyword">in</span> predict:</span><br><span class="line">        <span class="comment"># 获取聚类所在的下标</span></span><br><span class="line">        cat = k_means.predict(predict)</span><br><span class="line">        <span class="comment"># 参数依次为坐标x,y,使用字母代号表示的颜色，以及显示的样式（为x表示是x号）</span></span><br><span class="line">        pyplot.scatter(feature[<span class="number">0</span>], feature[<span class="number">1</span>], c=(<span class="string">'r'</span> <span class="keyword">if</span> cat == <span class="number">0</span> <span class="keyword">else</span> <span class="string">'b'</span>), marker=<span class="string">'x'</span>)</span><br><span class="line">        </span><br><span class="line">    pyplot.show()</span><br></pre></td></tr></table></figure>
+<p>执行结果：</p>
+<p><img src="http://blog.topspeedsnail.com/wp-content/uploads/2016/11/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7-2016-11-10-%E4%B8%8B%E5%8D%889.38.13.png" alt="ä½¿ç¨Pythonå®ç°K-Meansç®æ³"></p>
+<p>K-Means算法需要你指定K值，也就是需要人为指定数据应该分为几组。下一帖我会实现Mean Shift算法，它也是一种聚类算法(Hierarchical)，和K-Means(Flat)不同的是它可以自动判断数据集应该分为几组。</p>
+<h4 id="在实际数据上应用K-Means算法"><a href="#在实际数据上应用K-Means算法" class="headerlink" title="在实际数据上应用K-Means算法"></a>在实际数据上应用K-Means算法</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> sklearn.cluster <span class="keyword">import</span> KMeans</span><br><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> preprocessing</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"> </span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">数据集：titanic.xls(泰坦尼克号遇难者/幸存者名单)</span></span><br><span class="line"><span class="string">&lt;http://blog.topspeedsnail.com/wp-content/uploads/2016/11/titanic.xls&gt;</span></span><br><span class="line"><span class="string">***字段***</span></span><br><span class="line"><span class="string">pclass: 社会阶层(1，精英；2，中产；3，船员/劳苦大众)</span></span><br><span class="line"><span class="string">survived: 是否幸存</span></span><br><span class="line"><span class="string">name: 名字</span></span><br><span class="line"><span class="string">sex: 性别</span></span><br><span class="line"><span class="string">age: 年龄</span></span><br><span class="line"><span class="string">sibsp: 哥哥姐姐个数</span></span><br><span class="line"><span class="string">parch: 父母儿女个数</span></span><br><span class="line"><span class="string">ticket: 船票号</span></span><br><span class="line"><span class="string">fare: 船票价钱</span></span><br><span class="line"><span class="string">cabin: 船舱</span></span><br><span class="line"><span class="string">embarked</span></span><br><span class="line"><span class="string">boat</span></span><br><span class="line"><span class="string">body: 尸体</span></span><br><span class="line"><span class="string">home.dest</span></span><br><span class="line"><span class="string">******</span></span><br><span class="line"><span class="string">目的：使用除survived字段外的数据进行k-means分组（分成两组:生/死），然后和survived字段对比，看看分组效果。</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"> </span><br><span class="line"><span class="comment"># 加载数据</span></span><br><span class="line">df = pd.read_excel(<span class="string">'titanic.xls'</span>)</span><br><span class="line"><span class="comment">#print(df.shape)  (1309, 14)</span></span><br><span class="line"><span class="comment">#print(df.head())</span></span><br><span class="line"><span class="comment">#print(df.tail())</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">    pclass  survived                                            name     sex  \</span></span><br><span class="line"><span class="string">0       1         1                    Allen, Miss. Elisabeth Walton  female</span></span><br><span class="line"><span class="string">1       1         1                   Allison, Master. Hudson Trevor    male</span></span><br><span class="line"><span class="string">2       1         0                     Allison, Miss. Helen Loraine  female</span></span><br><span class="line"><span class="string">3       1         0             Allison, Mr. Hudson Joshua Creighton    male</span></span><br><span class="line"><span class="string">4       1         0  Allison, Mrs. Hudson J C (Bessie Waldo Daniels)  female</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">       age  sibsp  parch  ticket      fare    cabin embarked boat   body  \</span></span><br><span class="line"><span class="string">0  29.0000      0      0   24160  211.3375       B5        S    2    NaN</span></span><br><span class="line"><span class="string">1   0.9167      1      2  113781  151.5500  C22 C26        S   11    NaN</span></span><br><span class="line"><span class="string">2   2.0000      1      2  113781  151.5500  C22 C26        S  NaN    NaN</span></span><br><span class="line"><span class="string">3  30.0000      1      2  113781  151.5500  C22 C26        S  NaN  135.0</span></span><br><span class="line"><span class="string">4  25.0000      1      2  113781  151.5500  C22 C26        S  NaN    NaN</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    home.dest</span></span><br><span class="line"><span class="string">0                     St Louis, MO</span></span><br><span class="line"><span class="string">1  Montreal, PQ / Chesterville, ON</span></span><br><span class="line"><span class="string">2  Montreal, PQ / Chesterville, ON</span></span><br><span class="line"><span class="string">3  Montreal, PQ / Chesterville, ON</span></span><br><span class="line"><span class="string">4  Montreal, PQ / Chesterville, ON</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"> </span><br><span class="line"><span class="comment"># 去掉无用字段</span></span><br><span class="line">df.drop([<span class="string">'body'</span>,<span class="string">'name'</span>,<span class="string">'ticket'</span>], <span class="number">1</span>, inplace=<span class="literal">True</span>)</span><br><span class="line"> </span><br><span class="line">df.convert_objects(convert_numeric=<span class="literal">True</span>)</span><br><span class="line">df.fillna(<span class="number">0</span>, inplace=<span class="literal">True</span>)  <span class="comment"># 把NaN替换为0</span></span><br><span class="line"> </span><br><span class="line"><span class="comment"># 把字符串映射为数字，例如&#123;female:1, male:0&#125;</span></span><br><span class="line">df_map = &#123;&#125;  <span class="comment"># 保存映射关系</span></span><br><span class="line">cols = df.columns.values</span><br><span class="line"><span class="keyword">for</span> col <span class="keyword">in</span> cols:</span><br><span class="line">    <span class="keyword">if</span> df[col].dtype != np.int64 <span class="keyword">and</span> df[col].dtype != np.float64:</span><br><span class="line">        temp = &#123;&#125;</span><br><span class="line">        x = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> ele <span class="keyword">in</span> set(df[col].values.tolist()):</span><br><span class="line">            <span class="keyword">if</span> ele <span class="keyword">not</span> <span class="keyword">in</span> temp:</span><br><span class="line">                temp[ele] = x</span><br><span class="line">                x += <span class="number">1</span></span><br><span class="line"> </span><br><span class="line">        df_map[df[col].name] = temp</span><br><span class="line">        df[col] = list(map(<span class="keyword">lambda</span> val:temp[val], df[col]))</span><br><span class="line"> </span><br><span class="line"><span class="comment">#for key, value in df_map.iteritems():</span></span><br><span class="line"><span class="comment">#    print(key,value)</span></span><br><span class="line"><span class="comment">#print(df.head())</span></span><br><span class="line"> </span><br><span class="line"><span class="comment"># 由于是非监督学习，不使用label</span></span><br><span class="line">x = np.array(df.drop([<span class="string">'survived'</span>],<span class="number">1</span> ).astype(float))</span><br><span class="line">x = preprocessing.scale(x)</span><br><span class="line"> </span><br><span class="line">clf = KMeans(n_clusters=<span class="number">2</span>)</span><br><span class="line">clf.fit(x)</span><br><span class="line"><span class="comment"># 上面已把数据分成两组</span></span><br><span class="line"> </span><br><span class="line"><span class="comment"># 下面计算分组准确率是多少</span></span><br><span class="line">y = np.array(df[<span class="string">'survived'</span>])</span><br><span class="line"> </span><br><span class="line">correct = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(x)):</span><br><span class="line">    predict_data = np.array(x[i].astype(float))</span><br><span class="line">    predict_data = predict_data.reshape(<span class="number">-1</span>, len(predict_data))</span><br><span class="line">    predict = clf.predict(predict_data)</span><br><span class="line">    <span class="comment">#print(predict[0], y[i])</span></span><br><span class="line">    <span class="keyword">if</span> predict[<span class="number">0</span>] == y[i]:</span><br><span class="line">        correct+=<span class="number">1</span></span><br><span class="line"> </span><br><span class="line">print(correct*<span class="number">1.0</span>/len(x))</span><br></pre></td></tr></table></figure>
+<p>执行结果：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ python sk_kmeans.py </span><br><span class="line"><span class="number">0.692131398014</span>  <span class="comment"># 泰坦尼克号的幸存者和遇难者并不是随机分布的，在很大程度上取决于年龄、性别和社会地位</span></span><br><span class="line">$ python sk_kmeans.py </span><br><span class="line"><span class="number">0.307868601986</span>  <span class="comment"># 结果出现很大波动，原因是它随机分配组(生:0,死:1）(生:1,死:0）</span></span><br><span class="line">                <span class="comment"># 1-0.307868601986是实际值</span></span><br><span class="line">$ python sk_kmeans.py </span><br><span class="line"><span class="number">0.692131398014</span></span><br></pre></td></tr></table></figure>
+<p>K-means、和KNN算法比较</p>
+<p>KNN(K-Nearest Neighbor)介绍</p>
+<p>算法思路：如果一个样本在特征空间中的k个最相似(即特征空间中最邻近)的样本中的大多数属于某一个类别，则该样本也属于这个类别。该方法在定类决策上只依据最邻近的一个或者几个样本的类别来决定待分样本所属的类别。 </p>
+<h4 id="看下面这幅图："><a href="#看下面这幅图：" class="headerlink" title="看下面这幅图："></a>看下面这幅图：</h4><p><img src="https://img-blog.csdn.net/20131024142609828" alt="è¿éåå¾çæè¿°"></p>
+<p>KNN的算法过程是是这样的：<br>　　从上图中我们可以看到，图中的数据集是良好的数据，即都打好了label，一类是蓝色的正方形，一类是红色的三角形，那个绿色的圆形是我们待分类的数据。<br>　　如果K=3，那么离绿色点最近的有2个红色三角形和1个蓝色的正方形，这3个点投票，于是绿色的这个待分类点属于红色的三角形<br>　　如果K=5，那么离绿色点最近的有2个红色三角形和3个蓝色的正方形，这5个点投票，于是绿色的这个待分类点属于蓝色的正方形<br>　　我们可以看到，KNN本质是基于一种数据统计的方法！其实很多机器学习算法也是基于数据统计的。<br>　　KNN是一种memory-based learning，也叫instance-based learning，属于lazy learning。即它没有明显的前期训练过程，而是程序开始运行时，把数据集加载到内存后，不需要进行训练，就可以开始分类了。<br>　　具体是每次来一个未知的样本点，就在附近找K个最近的点进行投票。</p>
+<p>代码实现：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># k-近邻算法根据特征比较，然后提取样本集中特征最相似数据(最邻近)的分类标签</span></span><br><span class="line"><span class="comment"># 假设样本有两个特征，那么大致从样本集分布的散点图判断，也就是二维空间来体现它们的位置关系</span></span><br><span class="line"><span class="comment"># 这时采用点与点的距离可以计算出特定点与其他点的距离远近并加以排序，我们就可以知道谁离它最近了</span></span><br><span class="line"><span class="comment"># 在从前k名最近的点中判断属于特征1和特征2的点的比例，比例大的特征为该特定点的特征</span></span><br><span class="line"><span class="comment"># 所以k-近邻算法的步骤如下：</span></span><br><span class="line"><span class="comment"># 计算已知类别数据集中的点与当前点之间的距离；</span></span><br><span class="line"><span class="comment"># 按照距离递增次序排序；</span></span><br><span class="line"><span class="comment"># 选取与当前点距离最小的k个点；</span></span><br><span class="line"><span class="comment"># 确定前k个点所在类别的出现频率；</span></span><br><span class="line"><span class="comment"># 返回前k个点所出现频率最高的类别作为当前点的预测分类。</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">函数说明：创建数据集</span></span><br><span class="line"><span class="string">Parameters:</span></span><br><span class="line"><span class="string">    无</span></span><br><span class="line"><span class="string">Returns:</span></span><br><span class="line"><span class="string">    dataset - 数据集</span></span><br><span class="line"><span class="string">    labels - 分类标签</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="keyword">import</span>  numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> operator</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">createDataSet</span><span class="params">()</span>:</span></span><br><span class="line">    dataset=np.array([[<span class="number">1</span>,<span class="number">101</span>],[<span class="number">5</span>,<span class="number">89</span>],[<span class="number">108</span>,<span class="number">5</span>],[<span class="number">115</span>,<span class="number">8</span>]])</span><br><span class="line">    labels=[<span class="string">'爱情片'</span>,<span class="string">'爱情片'</span>,<span class="string">'动作片'</span>,<span class="string">'动作片'</span>]</span><br><span class="line">    <span class="keyword">return</span> dataset,labels</span><br><span class="line"></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">函数说明：KNN算法，分类器</span></span><br><span class="line"><span class="string">Parameters:</span></span><br><span class="line"><span class="string">    inX - 用于分类的特定数据(测试集)</span></span><br><span class="line"><span class="string">    dataSet - 用于训练的数据(训练集)</span></span><br><span class="line"><span class="string">    labes - 分类标签</span></span><br><span class="line"><span class="string">    k - kNN算法参数,选择距离最小的k个点</span></span><br><span class="line"><span class="string">Returns:</span></span><br><span class="line"><span class="string">    sortedClassCount[0][0] - 分类结果</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">classfy</span><span class="params">(inX,dataSet,labels,k)</span>:</span></span><br><span class="line">    <span class="comment"># 返回数据集的行数</span></span><br><span class="line">    dataSetSize=dataSet.shape[<span class="number">0</span>]</span><br><span class="line">    <span class="comment"># 使用tile数组实现inX的多行复制，满足矩阵相减的条件</span></span><br><span class="line">    diffMat=np.tile(inX,(dataSetSize,<span class="number">1</span>))-dataSet</span><br><span class="line">    <span class="comment"># 计算距离（矩阵各行取平方和，最后开方）</span></span><br><span class="line">    <span class="comment"># 使用sum函数中的axis参数可以决定按行（1）相加</span></span><br><span class="line">    distances=((diffMat**<span class="number">2</span>).sum(axis=<span class="number">1</span>))**<span class="number">0.5</span></span><br><span class="line">    <span class="comment"># 返回索引排序</span></span><br><span class="line">    sortedDistIndies=distances.argsort()</span><br><span class="line">    <span class="comment"># 记录类别次数</span></span><br><span class="line">    classCount=&#123;&#125;</span><br><span class="line">    <span class="comment"># 取出前k个元素的类别</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(k):</span><br><span class="line">        <span class="comment"># 根据索引获取类别值</span></span><br><span class="line">        voteIlabel = labels[sortedDistIndies[i]]</span><br><span class="line">        <span class="comment"># dict.get(key,default=None)，在classCount字典里查找类别，如果没有则返回1</span></span><br><span class="line">        classCount[voteIlabel]=classCount.get(voteIlabel,<span class="number">0</span>)+<span class="number">1</span></span><br><span class="line">    <span class="comment"># reverse降序排序字典</span></span><br><span class="line">    sortedClassCount = sorted(classCount.items(),key=operator.itemgetter(<span class="number">1</span>),reverse=<span class="literal">True</span>)</span><br><span class="line">    <span class="keyword">return</span> sortedClassCount[<span class="number">0</span>][<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__==<span class="string">'__main__'</span>:</span><br><span class="line">    <span class="comment"># 创建数据集</span></span><br><span class="line">    dataset,labels=createDataSet()</span><br><span class="line">    <span class="comment"># 打印数据集</span></span><br><span class="line">    <span class="comment"># print(dataset)</span></span><br><span class="line">    <span class="comment"># print(labels)</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 测试集</span></span><br><span class="line">    test=[<span class="number">101</span>,<span class="number">20</span>]</span><br><span class="line">    test_class=classfy(test,dataset,labels,<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">#打印分类结果</span></span><br><span class="line">    print(test_class)</span><br></pre></td></tr></table></figure>
+<p>总结：</p>
+<p>KNN和K-Means的区别</p>
+<p>KNN计算方法为：</p>
+<p>1计算测试数据与各个训练数据之间的距离；</p>
+<p>2按照距离的递增关系进行排序；</p>
+<p>3选取距离最小的K个点； </p>
+<p>4确定前K个点所在类别的出现频率； </p>
+<p>5返回前K个点中出现频率最高的类别作为测试数据的预测分类。 </p>
+<p>K-means的计算方法为： </p>
+<p>1 随机选取k个中心点； </p>
+<p>2 遍历所有数据，将每个数据划分到最近的中心点中； </p>
+<p>3 计算每个聚类的平均值，并作为新的中心点 ；</p>
+<p>4 重复2-3，直到这k个中线点不再变化（收敛了），或执行了足够多的迭代。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+      <div>
+        <div id="reward-container">
+  <div>不要投钱给我</div>
+  <button id="reward-button" disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    Donate
+  </button>
+  <div id="qr" style="display: none;">
+
+    
+      
+      
+        
+      
+      <div style="display: inline-block">
+        <img src="/images/wechatpay.jpg" alt="Mr.Chen WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/KNN/" rel="tag"># KNN</a>
+          
+            <a href="/tags/K-means/" rel="tag"># K-means</a>
+          
+            <a href="/tags/聚类/" rel="tag"># 聚类</a>
+          
+            <a href="/tags/分类/" rel="tag"># 分类</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div class="social_share">
+            
+              <div>
+                
+
+<script src="//cdn.jsdelivr.net/npm/ilyabirman-likely@2/release/likely.js"></script>
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/ilyabirman-likely@2/release/likely.css">
+
+
+  
+
+
+<div class="likely">
+	
+ 	 	<div class="twitter">Tweet</div>
+	
+ 	 	<div class="facebook">Share</div>
+	
+ 	 	<div class="linkedin">Link</div>
+	
+ 	 	<div class="gplus">Plus</div>
+	
+ 	 	<div class="vkontakte">Share</div>
+	
+ 	 	<div class="odnoklassniki">Class</div>
+	
+ 	 	<div class="telegram">Send</div>
+	
+ 	 	<div class="whatsapp">Send</div>
+	
+ 	 	<div class="pinterest">Pin</div>
+	
+</div>
+
+              </div>
+            
+            
+            
+          </div>
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/21/都挺好/" rel="next" title="都挺好">
+                <i class="fa fa-chevron-left"></i> 都挺好
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/04/28/JQuery相关事宜/" rel="prev" title="JQuery相关事宜">
+                JQuery相关事宜 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="gitalk-container">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+              
+                 <img class="site-author-image" itemprop="image" src="/images/myimg.jpg" alt="Mr.Chen">
+              
+              <p class="site-author-name" itemprop="name">Mr.Chen</p>
+              <div class="site-description motion-element" itemprop="description">鹿有森林，鲸有深海</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives">
+                
+                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-name">categories</span>
+                  
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">30</span>
+                    <span class="site-state-item-name">tags</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/8bun" title="GitHub &rarr; https://github.com/8bun" rel="external nofollow noopener noreferrer" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://blog.csdn.net/DYD850804" title="CSDN &rarr; https://blog.csdn.net/DYD850804" rel="external nofollow noopener noreferrer" target="_blank"><i class="fa fa-fw fa-CSDN"></i>CSDN</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://stackoverflow.com/users/10155825/Jack" title="StackOverflow &rarr; https://stackoverflow.com/users/10155825/Jack" rel="external nofollow noopener noreferrer" target="_blank"><i class="fa fa-fw fa-stack-overflow"></i>StackOverflow</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#首先我们把上面的数据画到二位坐标系当中-A-1-1-B-2-1-C-4-3-D-5-4"><span class="nav-number">1.</span> <span class="nav-text">首先我们把上面的数据画到二位坐标系当中     A(1,1),B(2,1),C(4,3),D(5,4):</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#初始时，由于假设K-2-表示将所有数据集分为两组，我们称之为聚类-我们先假设药物A为聚类1的中心点，B为聚类2的中心点。"><span class="nav-number">2.</span> <span class="nav-text">初始时，由于假设K=2 (表示将所有数据集分为两组，我们称之为聚类) 我们先假设药物A为聚类1的中心点，B为聚类2的中心点。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#那么初始时的中心坐标分别为c1-1-1-c2-2-1-c1-1-1-c2-2-1-，矩阵D的第一行代表各个点到中心点c1的距离，第二行代表各个点到中心点c2的距离；那么初始矩阵D0表示成如下："><span class="nav-number">3.</span> <span class="nav-text">那么初始时的中心坐标分别为c1=(1,1),c2=(2,1)c1=(1,1),c2=(2,1)，矩阵D的第一行代表各个点到中心点c1的距离，第二行代表各个点到中心点c2的距离；那么初始矩阵D0表示成如下：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#矩阵-D0向我们展示了除了中心点之外的其他所有点距离K个中心点的距离大小，每个点距离各个中心点的距离都不尽相同。所谓近水楼台先得月，所以将点归入离点最近的中心点一类。以后每开始一次的迭代，都会重新算出每个聚类的中心点，然后根据相同的操作进行点的归类，直到聚类中心不再进行大范围移动或者聚类次数达到要求为止。"><span class="nav-number">4.</span> <span class="nav-text">矩阵 D0向我们展示了除了中心点之外的其他所有点距离K个中心点的距离大小，每个点距离各个中心点的距离都不尽相同。所谓近水楼台先得月，所以将点归入离点最近的中心点一类。以后每开始一次的迭代，都会重新算出每个聚类的中心点，然后根据相同的操作进行点的归类，直到聚类中心不再进行大范围移动或者聚类次数达到要求为止。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#矩阵G0代表样本应该归属于哪个聚类，第一行代表各个点是否属于中心c1所在的类（0代表不在，1代表在），第二行代表各个点是否属于中心c2所在的类（0代表不在，1代表在）；那么此时G0表示成如下："><span class="nav-number">5.</span> <span class="nav-text">矩阵G0代表样本应该归属于哪个聚类，第一行代表各个点是否属于中心c1所在的类（0代表不在，1代表在），第二行代表各个点是否属于中心c2所在的类（0代表不在，1代表在）；那么此时G0表示成如下：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#由矩阵D0可知A药物属于一个类，B、C、D属于一类；"><span class="nav-number">6.</span> <span class="nav-text">由矩阵D0可知A药物属于一个类，B、C、D属于一类；</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#然后，利用均值等方法更新该类的中心值。"><span class="nav-number">7.</span> <span class="nav-text">然后，利用均值等方法更新该类的中心值。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#c1-（1-1）"><span class="nav-number">8.</span> <span class="nav-text">c1=（1,1）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#c2-（-2-4-5-3-1-3-4-3）-13-3-8-3"><span class="nav-number">9.</span> <span class="nav-text">c2=（(2+4+5)/3,(1+3+4)/3）= (13/3,8/3)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#上图是更新后的坐标图，对应的中心点也发生了变化。"><span class="nav-number">10.</span> <span class="nav-text">上图是更新后的坐标图，对应的中心点也发生了变化。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#因为中心点跟上次不一样了，所以我们又可以对样本点进行重新划分。划分的方法还是跟以前一模一样，我们先计算出矩阵D1表示成如下："><span class="nav-number">11.</span> <span class="nav-text">因为中心点跟上次不一样了，所以我们又可以对样本点进行重新划分。划分的方法还是跟以前一模一样，我们先计算出矩阵D1表示成如下：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#此时G1表示成如下："><span class="nav-number">12.</span> <span class="nav-text">此时G1表示成如下：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#由矩阵G1可知A、B药物属于一个类，C、D属于一类；"><span class="nav-number">13.</span> <span class="nav-text">由矩阵G1可知A、B药物属于一个类，C、D属于一类；</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#然后，利用均值等方法再次更新该类的中心值。"><span class="nav-number">14.</span> <span class="nav-text">然后，利用均值等方法再次更新该类的中心值。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#c1-（-1-2-2-1-1-2）-1-5-1"><span class="nav-number">15.</span> <span class="nav-text">c1=（(1+2)/2,(1+1)/2）=(1.5,1)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#c2-（-4-5-2-3-4-2）-4-5-3-5"><span class="nav-number">16.</span> <span class="nav-text">c2=（(4+5)/2,(3+4)/2）=(4.5,3.5)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#由矩阵G2可知A、B药物属于一个类，C、D属于一类；"><span class="nav-number">17.</span> <span class="nav-text">由矩阵G2可知A、B药物属于一个类，C、D属于一类；</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#然后，利用均值等方法再次更新该类的中心值。-1"><span class="nav-number">18.</span> <span class="nav-text">然后，利用均值等方法再次更新该类的中心值。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#c1-（-1-2-2-1-1-2）-1-5-1-1"><span class="nav-number">19.</span> <span class="nav-text">c1=（(1+2)/2,(1+1)/2）=(1.5,1)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#c2-（-4-5-2-3-4-2）-4-5-3-5-1"><span class="nav-number">20.</span> <span class="nav-text">c2=（(4+5)/2,(3+4)/2）=(4.5,3.5)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#因为对应的中心点并没有发生变化，所以迭代停止，计算完毕。"><span class="nav-number">21.</span> <span class="nav-text">因为对应的中心点并没有发生变化，所以迭代停止，计算完毕。</span></a></li></ol><li class="nav-item nav-level-4"><a class="nav-link" href="#K-means算法试图找到使平凡误差准则函数最小的簇。当潜在的簇形状是凸面的，簇与簇之间区别较明显，且簇大小相近时，其聚类结果较理想。前面提到，该算法时间复杂度为O-tkmn-，与样本数量线性相关，所以，对于处理大数据集合，该算法非常高效，且伸缩性较好。但该算法除了要事先确定簇数K和对初始聚类中心敏感外，经常以局部最优结束，同时对“噪声”和孤立点敏感，并且该方法不适于发现非凸面形状的簇或大小差别很大的簇。"><span class="nav-number"></span> <span class="nav-text">K-means算法试图找到使平凡误差准则函数最小的簇。当潜在的簇形状是凸面的，簇与簇之间区别较明显，且簇大小相近时，其聚类结果较理想。前面提到，该算法时间复杂度为O(tkmn)，与样本数量线性相关，所以，对于处理大数据集合，该算法非常高效，且伸缩性较好。但该算法除了要事先确定簇数K和对初始聚类中心敏感外，经常以局部最优结束，同时对“噪声”和孤立点敏感，并且该方法不适于发现非凸面形状的簇或大小差别很大的簇。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1、聚类中心的个数K-需要事先给定，但在实际中这个-K-值的选定是非常难以估计的，很多时候，事先并不知道给定的数据集应该分成多少个类别才最合适；"><span class="nav-number"></span> <span class="nav-text">1、聚类中心的个数K 需要事先给定，但在实际中这个 K 值的选定是非常难以估计的，很多时候，事先并不知道给定的数据集应该分成多少个类别才最合适；</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2、K-means需要人为地确定初始聚类中心，不同的初始聚类中心可能导致完全不同的聚类结果。（可以使用K-means-算法来解决）"><span class="nav-number"></span> <span class="nav-text">2、K-means需要人为地确定初始聚类中心，不同的初始聚类中心可能导致完全不同的聚类结果。（可以使用K-means++算法来解决）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#在实际数据上应用K-Means算法"><span class="nav-number"></span> <span class="nav-text">在实际数据上应用K-Means算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#看下面这幅图："><span class="nav-number"></span> <span class="nav-text">看下面这幅图：</span></a></li></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+    <div id="sidebar-dimmer"></div>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mr.Chen</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="external nofollow noopener noreferrer" target="_blank">Hexo</a> v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="external nofollow noopener noreferrer" target="_blank">NexT.Gemini</a> v7.1.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="Total Visitors">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="Total Views">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+  </div>
+
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.0"></script>
+
+  <script src="/js/motion.js?v=7.1.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.0"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.0"></script>
+<script src="/js/post-details.js?v=7.1.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+    
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+  <script src="/js/md5.min.js"></script>
+   <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: 'db37fc5f69ac01bd0cec',
+          clientSecret: '60138b57b65161bd4bec11c3f9cf3b8db5f0291d',
+          repo: 'gitalk',
+          owner: '8bun',
+          admin: ['8bun'],
+          id: md5(location.pathname),
+          labels: 'gitalk'.split(',').filter(l => l),
+          perPage: 15,
+          pagerDirection: 'last',
+          createIssueManually: true,
+          distractionFreeMode: false
+        })
+        gitalk.render('gitalk-container')
+       </script>
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+<script>
+  $('.highlight').each(function(i, e) {
+    var $wrap = $('<div>').addClass('highlight-wrap');
+    $(e).after($wrap);
+    $wrap.append($('<button>').addClass('copy-btn').append('Copy').on('click', function(e) {
+      var code = $(this).parent().find('.code').find('.line').map(function(i, e) {
+        return $(e).text();
+      }).toArray().join('\n');
+      var ta = document.createElement('textarea');
+      var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+      ta.style.top = yPosition + 'px'; // Prevent page scroll
+      ta.style.position = 'absolute';
+      ta.style.opacity = '0';
+      ta.readOnly = true;
+      ta.value = code;
+      document.body.appendChild(ta);
+      ta.select();
+      ta.setSelectionRange(0, code.length);
+      ta.readOnly = false;
+      var result = document.execCommand('copy');
+      
+      ta.blur(); // For iOS
+      $(this).blur();
+    })).on('mouseleave', function(e) {
+      var $b = $(this).find('.copy-btn');
+      setTimeout(function() {
+        $b.text('Copy');
+      }, 300);
+    }).append(e);
+  })
+</script>
+
+
+  
+
+  
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/assets/tororo.model.json"},"display":{"position":"right","width":200,"height":350},"mobile":{"show":true},"react":{"opacity":0.85},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
