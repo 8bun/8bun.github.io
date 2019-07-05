@@ -94,12 +94,13 @@
 
 
 
-  <meta name="description" content="title: Git 相关知识toc: truedate: 2019-07-03 19:39:25tags:  gitcategories: 集中式版本控制系统  配置在为你的电脑安装完Git之后，因为Git是分布式版本控制系统，所以，每个机器都必须自报家门：你的名字和Email地址。你也许会担心，如果有人故意冒充别人怎么办？这个不必担心，首先我们相信大家都是善良无知的群众，其次，真的有冒充的也是">
+  <meta name="description" content="配置在为你的电脑安装完Git之后，因为Git是分布式版本控制系统，所以，每个机器都必须自报家门：你的名字和Email地址。你也许会担心，如果有人故意冒充别人怎么办？这个不必担心，首先我们相信大家都是善良无知的群众，其次，真的有冒充的也是有办法可查的。 注意git config命令的--global参数，用了这个参数，表示你这台机器上所有的Git仓库都会使用这个配置，当然也可以对某个仓库指定不同的用">
+<meta name="keywords" content="Git,GitHub">
 <meta property="og:type" content="article">
-<meta property="og:title" content="MrChen">
-<meta property="og:url" content="https://8bun.github.io/2019/07/03/Git-相关知识/index.html">
+<meta property="og:title" content="Git相关知识">
+<meta property="og:url" content="https://8bun.github.io/2019/07/05/Git相关知识/index.html">
 <meta property="og:site_name" content="MrChen">
-<meta property="og:description" content="title: Git 相关知识toc: truedate: 2019-07-03 19:39:25tags:  gitcategories: 集中式版本控制系统  配置在为你的电脑安装完Git之后，因为Git是分布式版本控制系统，所以，每个机器都必须自报家门：你的名字和Email地址。你也许会担心，如果有人故意冒充别人怎么办？这个不必担心，首先我们相信大家都是善良无知的群众，其次，真的有冒充的也是">
+<meta property="og:description" content="配置在为你的电脑安装完Git之后，因为Git是分布式版本控制系统，所以，每个机器都必须自报家门：你的名字和Email地址。你也许会担心，如果有人故意冒充别人怎么办？这个不必担心，首先我们相信大家都是善良无知的群众，其次，真的有冒充的也是有办法可查的。 注意git config命令的--global参数，用了这个参数，表示你这台机器上所有的Git仓库都会使用这个配置，当然也可以对某个仓库指定不同的用">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://www.liaoxuefeng.com/files/attachments/919020037470528/0">
 <meta property="og:image" content="https://www.liaoxuefeng.com/files/attachments/919019707114272/0">
@@ -110,10 +111,10 @@
 <meta property="og:image" content="https://git-scm.com/figures/18333fig0308-tn.png">
 <meta property="og:image" content="https://www.liaoxuefeng.com/files/attachments/919023031831104/0">
 <meta property="og:image" content="https://www.liaoxuefeng.com/files/attachments/919023260793600/0">
-<meta property="og:updated_time" content="2019-07-05T05:40:03.400Z">
+<meta property="og:updated_time" content="2019-07-05T05:45:44.613Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="MrChen">
-<meta name="twitter:description" content="title: Git 相关知识toc: truedate: 2019-07-03 19:39:25tags:  gitcategories: 集中式版本控制系统  配置在为你的电脑安装完Git之后，因为Git是分布式版本控制系统，所以，每个机器都必须自报家门：你的名字和Email地址。你也许会担心，如果有人故意冒充别人怎么办？这个不必担心，首先我们相信大家都是善良无知的群众，其次，真的有冒充的也是">
+<meta name="twitter:title" content="Git相关知识">
+<meta name="twitter:description" content="配置在为你的电脑安装完Git之后，因为Git是分布式版本控制系统，所以，每个机器都必须自报家门：你的名字和Email地址。你也许会担心，如果有人故意冒充别人怎么办？这个不必担心，首先我们相信大家都是善良无知的群众，其次，真的有冒充的也是有办法可查的。 注意git config命令的--global参数，用了这个参数，表示你这台机器上所有的Git仓库都会使用这个配置，当然也可以对某个仓库指定不同的用">
 <meta name="twitter:image" content="https://www.liaoxuefeng.com/files/attachments/919020037470528/0">
 
 
@@ -124,7 +125,7 @@
 
   
   
-  <link rel="canonical" href="https://8bun.github.io/2019/07/03/Git-相关知识/">
+  <link rel="canonical" href="https://8bun.github.io/2019/07/05/Git相关知识/">
 
 
 
@@ -134,7 +135,7 @@
   };
 </script>
 
-  <title> | MrChen</title>
+  <title>Git相关知识 | MrChen</title>
   
 
 
@@ -410,7 +411,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://8bun.github.io/2019/07/03/Git-相关知识/">
+    <link itemprop="mainEntityOfPage" href="https://8bun.github.io/2019/07/05/Git相关知识/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Mr.Chen">
@@ -427,7 +428,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h1 class="post-title" itemprop="name headline">Git相关知识
 
               
             
@@ -453,28 +454,34 @@
                 
               
 
-              <time title="Created: 2019-07-03 19:39:25" itemprop="dateCreated datePublished" datetime="2019-07-03T19:39:25+08:00">2019-07-03</time>
+              <time title="Created: 2019-07-05 13:43:44 / Modified: 13:45:44" itemprop="dateCreated datePublished" datetime="2019-07-05T13:43:44+08:00">2019-07-05</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2019-07-05 13:40:03" itemprop="dateModified" datetime="2019-07-05T13:40:03+08:00">2019-07-05</time>
               
             
           </span>
 
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/版本控制系统/" itemprop="url" rel="index"><span itemprop="name">版本控制系统</span></a></span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -511,12 +518,7 @@
       
 
       
-        <p>title: Git 相关知识<br>toc: true<br>date: 2019-07-03 19:39:25<br>tags:</p>
-<ul>
-<li>git<br>categories:</li>
-<li>集中式版本控制系统</li>
-</ul>
-<h1 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h1><p>在为你的电脑安装完<code>Git</code>之后，因为Git是分布式版本控制系统，所以，每个机器都必须自报家门：你的名字和Email地址。你也许会担心，如果有人故意冒充别人怎么办？这个不必担心，首先我们相信大家都是善良无知的群众，其次，真的有冒充的也是有办法可查的。</p>
+        <h1 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h1><p>在为你的电脑安装完<code>Git</code>之后，因为<code>Git</code>是分布式版本控制系统，所以，每个机器都必须自报家门：你的名字和<code>Email</code>地址。你也许会担心，如果有人故意冒充别人怎么办？这个不必担心，首先我们相信大家都是善良无知的群众，其次，真的有冒充的也是有办法可查的。</p>
 <p>注意<code>git config</code>命令的<code>--global</code>参数，用了这个参数，表示你这台机器上所有的Git仓库都会使用这个配置，当然也可以对某个仓库指定不同的用户名和Email地址。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git config --global user.name &quot;Your Name&quot;</span><br><span class="line">$ git config --global user.email &quot;email@example.com&quot;</span><br></pre></td></tr></table></figure>
 <p>你可以在任何一个目录下进行<code>git init</code>操作，让<code>Git</code>系统来跟踪记录你的文件的修改情况。</p>
@@ -777,6 +779,14 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/Git/" rel="tag"># Git</a>
+          
+            <a href="/tags/GitHub/" rel="tag"># GitHub</a>
+          
+        </div>
+      
 
       
       
@@ -838,8 +848,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/07/02/递归新理解/" rel="next" title="递归新理解">
-                <i class="fa fa-chevron-left"></i> 递归新理解
+              <a href="/2019/07/03/公钥、私钥和安全证书/" rel="next" title="公钥、私钥和安全证书">
+                <i class="fa fa-chevron-left"></i> 公钥、私钥和安全证书
               </a>
             
           </div>
@@ -847,10 +857,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/07/03/公钥、私钥和安全证书/" rel="prev" title="公钥、私钥和安全证书">
-                公钥、私钥和安全证书 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
