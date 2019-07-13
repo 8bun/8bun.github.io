@@ -400,6 +400,174 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://8bun.github.io/2019/07/13/XML之xmlns相关/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Mr.Chen">
+      <meta itemprop="description" content="鹿有森林，鲸有深海">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MrChen">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/07/13/XML之xmlns相关/" class="post-title-link" itemprop="url">XML之xmlns相关</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-07-13 21:45:28 / Modified: 21:55:08" itemprop="dateCreated datePublished" datetime="2019-07-13T21:45:28+08:00">2019-07-13</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/xml/" itemprop="url" rel="index"><span itemprop="name">xml</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>对于很多<code>xml</code>文件的开头，通常都会有类似如下的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; </span><br><span class="line">xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; </span><br><span class="line">xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>可以这样理解：</p>
+<p>首先这个文件是一个<code>xml</code>文件，那么文件里面的所有内容都符合<code>xml</code>语法规范，</p>
+<p>开头的<code>&lt;project&gt;&lt;/project&gt;</code>这最外层同样也是一个<code>xml</code>文件的标签，后面那一长串也就是所谓的属性，其中xmlns表示命名空间，<code>xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot;</code> 这表示默认命名空间（如果你的<code>xml</code>标签没有带任何前缀，则默认认定标签来自默认命名空间），而下面<code>xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</code> 这个命名空间里面的元素或者属性就必须要以<code>xsi:</code>这种方式来写，比如<code>schemaLocation</code>就是他的一个属性，所以写成<code>xsi:schemaLocation</code>，而默认命名空间不带类似<code>xsi</code>这种，其实xml标签名称有个专业叫法叫做<code>QName</code>，而如果没有前面的<code>xsi:</code>这种一般叫做<code>NCName</code>。</p>
+<p>你会发现， 这个 <code>xmlns:xsi</code> 在不同的 xml 文档中似乎都会出现。 这是因为， <code>xsi</code> 已经成为了一个业界默认的用于 <code>XSD（XML Schema Definition)</code> 文件的命名空间。</p>
+<p>所以像<code>mvn</code>里面的<code>&lt;dependency&gt;</code>这种就是默认命名空间下面的元素，最后那一行就表示把定义这个命名空间的<code>schema</code>文件给引用进来，好让<code>eclipse</code>这类型工具能够解析和验证你的xml文件是否符合语法规范。</p>
+<p><code>xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd&quot;</code><br>上面这行的语法其实是， <code>xsi:schemaLocation = &quot;键&quot; &quot;值&quot;</code>。即 <code>xsi</code> 命名空间下 <code>schemaLocation</code>元素的值为一个由空格分开的键值对。等同于<code>&lt;import namespace=&quot;xxx&quot; schemaLocation=&quot;xxx.xsd&quot;/&gt;</code>。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://8bun.github.io/2019/07/08/PHP学习笔记/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -462,7 +630,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-07-09 13:17:57" itemprop="dateModified" datetime="2019-07-09T13:17:57+08:00">2019-07-09</time>
+                <time title="Modified: 2019-07-10 22:09:49" itemprop="dateModified" datetime="2019-07-10T22:09:49+08:00">2019-07-10</time>
               
             
           </span>
@@ -1958,201 +2126,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://8bun.github.io/2019/05/07/Vue之事件修饰符/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Mr.Chen">
-      <meta itemprop="description" content="鹿有森林，鲸有深海">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MrChen">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/05/07/Vue之事件修饰符/" class="post-title-link" itemprop="url">Vue之事件修饰符</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2019-05-07 22:17:40" itemprop="dateCreated datePublished" datetime="2019-05-07T22:17:40+08:00">2019-05-07</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2019-05-10 20:56:12" itemprop="dateModified" datetime="2019-05-10T20:56:12+08:00">2019-05-10</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/前端/" itemprop="url" rel="index"><span itemprop="name">前端</span></a></span>
-
-                
-                
-                  , 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/前端/Vue/" itemprop="url" rel="index"><span itemprop="name">Vue</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>这些时间自学 Vue 框架，遇到了其事件修饰，感觉挺有意思的，索性写一下它们的区别和联系。</p>
-<p>Vue提供了很多事件修饰符来辅助实现一些功能。</p>
-<p>常见的事件修饰符有如下：</p>
-<ul>
-<li><code>.stop</code> 阻止冒泡。本质是调用 event.stopPropagation()。</li>
-<li><code>.prevent</code> 阻止默认事件（默认行为）。本质是调用 event.preventDefault()。</li>
-<li><code>.capture</code> 添加事件监听器时，使用捕获的方式（也就是说，事件采用捕获的方式，而不是采用冒泡的方式）。</li>
-<li><code>.self</code> 只有当事件在该元素本身（比如不是子元素）触发时，才会触发回调。</li>
-<li><code>.once</code> 事件只触发一次。</li>
-</ul>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/05/07/Vue之事件修饰符/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2201,7 +2174,7 @@
                 
                   <a href="/archives">
                 
-                    <span class="site-state-item-count">18</span>
+                    <span class="site-state-item-count">19</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -2248,7 +2221,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">17</span>
+                      
+                    
+                    <span class="site-state-item-count">18</span>
                     <span class="site-state-item-name">categories</span>
                   
                 </div>
@@ -2333,7 +2308,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">36</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">38</span>
                     <span class="site-state-item-name">tags</span>
                   
                 </div>

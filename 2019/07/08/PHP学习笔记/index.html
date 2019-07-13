@@ -102,7 +102,7 @@
 <meta property="og:site_name" content="MrChen">
 <meta property="og:description" content="PHP表单PHP脚本可以通过_GET或_POST来获取相应表单的提交内容。 预定义的$_REQUEST变量包含了 $_GET、$_POST 和 $_COOKIE 的内容。 $_REQUEST 变量可用来收集通过 GET 和 POST方法发送的表单数据。 函数传入表单元素name可以获取该name表单元素所填的值，函数返回该值或数组。 如果对于表单中的selector多w个option，你可以选择将">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-07-09T05:17:57.447Z">
+<meta property="og:updated_time" content="2019-07-10T14:09:49.127Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PHP学习笔记">
 <meta name="twitter:description" content="PHP表单PHP脚本可以通过_GET或_POST来获取相应表单的提交内容。 预定义的$_REQUEST变量包含了 $_GET、$_POST 和 $_COOKIE 的内容。 $_REQUEST 变量可用来收集通过 GET 和 POST方法发送的表单数据。 函数传入表单元素name可以获取该name表单元素所填的值，函数返回该值或数组。 如果对于表单中的selector多w个option，你可以选择将">
@@ -461,7 +461,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-07-09 13:17:57" itemprop="dateModified" datetime="2019-07-09T13:17:57+08:00">2019-07-09</time>
+                <time title="Modified: 2019-07-10 22:09:49" itemprop="dateModified" datetime="2019-07-10T22:09:49+08:00">2019-07-10</time>
               
             
           </span>
@@ -608,7 +608,21 @@
 <h2 id="PHP编程"><a href="#PHP编程" class="headerlink" title="PHP编程"></a>PHP编程</h2><p>在您把用户信息存储到<code>PHP session</code>中之前，首先必须启动会话。</p>
 <p>使用<code>session_start()</code>启动会话，此时用户的会话被注册，然后使用<code>$_SESSION</code>数组存储<code>session</code>数据</p>
 <p>您也可以通过调用 <code>session_destroy()</code>函数彻底销毁 <code>session</code> 。</p>
-
+<h1 id="PHP、MySQL"><a href="#PHP、MySQL" class="headerlink" title="PHP、MySQL"></a>PHP、MySQL</h1><p>PHP 5 及以上版本建议使用以下方式连接 MySQL :</p>
+<ul>
+<li><strong>MySQLi extension</strong> (“i” 意为 improved)</li>
+<li><strong>PDO (PHP Data Objects)</strong></li>
+</ul>
+<h2 id="不同点"><a href="#不同点" class="headerlink" title="不同点"></a>不同点</h2><p><code>MySQLi</code> 和<code>PDO</code> 有它们自己的优势：</p>
+<p><code>PDO</code> 应用在 <code>12</code> 种不同数据库中，<code>MySQLi</code> 只针对 <code>MySQL</code> 数据库。</p>
+<p>所以，如果你的项目需要在多种数据库中切换，建议使用 <code>PDO</code> ，这样你只需要修改连接字符串和部分查询语句即可。 使用 <code>MySQLi</code>, 如果不同数据库，你需要重新编写所有代码，包括查询。</p>
+<p>两者都是面向对象, 但 <code>MySQLi</code> 还提供了 <code>API</code>接口。</p>
+<p>两者都支持预处理语句。 预处理语句可以防止 <code>SQL</code>注入，对于 <code>web</code>项目的安全性是非常重要的。</p>
+<p>在使用之前需要先查看<code>phpinfo()</code>有没有<code>mysqli</code>和<code>PDO</code>的安装信息。</p>
+<h1 id="Ajax"><a href="#Ajax" class="headerlink" title="Ajax"></a>Ajax</h1><p>ajax的全称是<strong>A</strong>synchronous<strong><em>J</em></strong>avascript<strong><em>+X</em></strong>ML。<br><code>异步传输+js+xml</code>。所谓异步，在这里简单地解释就是：向服务器发送请求的时候，我们不必等待结果，而是可以同时做其他的事情，等到有了结果我们可以再来处理这个事。（当然，在其他语境下这个解释可能就不对了）<br>这个很重要，如果不是这样的话，我们点完按钮，页面就会死在那里，其他的数据请求不会往下走了。这样比等待刷新似乎更加讨厌。<br>（虽然提供异步通讯功能的组件默认情况下都是异步的，但它们也提供了同步选项，如果你好奇把那个选项改为false的话，你的页面就会死在那里）<br>xml只是一种数据格式，在这件事里并不重要，我们在更新一行字的时候理论上说不需要这个格式，但如果我们更新很多内容，那么格式化的数据可以使我们有条理地去实现更新。</p>
+<p>现在大部分人其实是用<code>JSON</code>这种格式来代替<code>XML</code>的，因为前者更加简洁，据说目前的解析速度也更快。多快好省，能省则省啊。</p>
+<p>总结：只要是<code>JS</code>调用异步通讯组件并使用格式化的数据来更新<code>web</code>页面上的内容或操作过程，那么我们用的方法就可算是<code>AJAX</code>。</p>
+<h3 id><a href="#" class="headerlink" title=" "></a> </h3>
       
     </div>
 
@@ -730,6 +744,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2019/07/13/XML之xmlns相关/" rel="prev" title="XML之xmlns相关">
+                XML之xmlns相关 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -803,7 +821,7 @@
                 
                   <a href="/archives">
                 
-                    <span class="site-state-item-count">18</span>
+                    <span class="site-state-item-count">19</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -850,7 +868,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">17</span>
+                      
+                    
+                    <span class="site-state-item-count">18</span>
                     <span class="site-state-item-name">categories</span>
                   
                 </div>
@@ -935,7 +955,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">36</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">38</span>
                     <span class="site-state-item-name">tags</span>
                   
                 </div>
@@ -1017,7 +1041,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#PHP表单"><span class="nav-number">1.</span> <span class="nav-text">PHP表单</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#应用"><span class="nav-number">1.1.</span> <span class="nav-text">应用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#几个-SERVER数组的区别"><span class="nav-number">1.2.</span> <span class="nav-text">几个$_SERVER数组的区别</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SERVER-39-PHP-SELF-39-的避免使用"><span class="nav-number">1.2.1.</span> <span class="nav-text">_SERVER[&#39;PHP_SELF&#39;]的避免使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安全漏洞"><span class="nav-number">1.2.2.</span> <span class="nav-text">安全漏洞</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Cookie"><span class="nav-number">2.</span> <span class="nav-text">Cookie</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Cookie-是什么"><span class="nav-number">2.1.</span> <span class="nav-text">Cookie 是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何使用-Cookie"><span class="nav-number">2.2.</span> <span class="nav-text">如何使用 Cookie</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cookie注意事项"><span class="nav-number">2.3.</span> <span class="nav-text">Cookie注意事项</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#局限"><span class="nav-number">2.4.</span> <span class="nav-text">局限</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Session"><span class="nav-number">3.</span> <span class="nav-text">Session</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">3.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注意点"><span class="nav-number">3.2.</span> <span class="nav-text">注意点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PHP编程"><span class="nav-number">3.3.</span> <span class="nav-text">PHP编程</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#PHP表单"><span class="nav-number">1.</span> <span class="nav-text">PHP表单</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#应用"><span class="nav-number">1.1.</span> <span class="nav-text">应用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#几个-SERVER数组的区别"><span class="nav-number">1.2.</span> <span class="nav-text">几个$_SERVER数组的区别</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SERVER-39-PHP-SELF-39-的避免使用"><span class="nav-number">1.2.1.</span> <span class="nav-text">_SERVER[&#39;PHP_SELF&#39;]的避免使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安全漏洞"><span class="nav-number">1.2.2.</span> <span class="nav-text">安全漏洞</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Cookie"><span class="nav-number">2.</span> <span class="nav-text">Cookie</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Cookie-是什么"><span class="nav-number">2.1.</span> <span class="nav-text">Cookie 是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何使用-Cookie"><span class="nav-number">2.2.</span> <span class="nav-text">如何使用 Cookie</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cookie注意事项"><span class="nav-number">2.3.</span> <span class="nav-text">Cookie注意事项</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#局限"><span class="nav-number">2.4.</span> <span class="nav-text">局限</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Session"><span class="nav-number">3.</span> <span class="nav-text">Session</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">3.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注意点"><span class="nav-number">3.2.</span> <span class="nav-text">注意点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PHP编程"><span class="nav-number">3.3.</span> <span class="nav-text">PHP编程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PHP、MySQL"><span class="nav-number">4.</span> <span class="nav-text">PHP、MySQL</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#不同点"><span class="nav-number">4.1.</span> <span class="nav-text">不同点</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Ajax"><span class="nav-number">5.</span> <span class="nav-text">Ajax</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#"><span class="nav-number">5.0.1.</span> <span class="nav-text"> </span></a></li></ol></li></ol></div>
             
 
           </div>
