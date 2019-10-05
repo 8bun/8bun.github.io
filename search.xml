@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Go瀹炵幇BSo实现BS模式三层结构]]></title>
+    <url>%2F2019%2F10%2F05%2FGo%E7%80%B9%E7%82%B5%E5%B9%87BSo%E5%AE%9E%E7%8E%B0BS%E6%A8%A1%E5%BC%8F%E4%B8%89%E5%B1%82%E7%BB%93%E6%9E%84%2F</url>
+    <content type="text"><![CDATA[PHP语言编写，与数据库交互的登录注册小Example，体现B/S三层结构 代码细节请点击：]]></content>
+      <categories>
+        <category>Go</category>
+      </categories>
+      <tags>
+        <tag>B/S架构</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Java之设计模式]]></title>
     <url>%2F2019%2F10%2F05%2FJava%E4%B9%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%2F</url>
     <content type="text"><![CDATA[生成器模式用法：当要创建一个具有复杂功能的对象时，我们可以使用一个简单对象来创建。它从小而简单的对象逐步创建更大更复杂的对象。生成器模式是另一个创建模式。 举例：当创建一个窗口作为我们应用程序的主窗口时，我们需要创建一个菜单，一个工具栏，然后添加菜单和工具栏。对于我们要创建的每个窗口，我们需要创建一个空窗口，创建菜单，创建工具栏，将菜单和工具栏安装到窗口。我们可以使用构建器模式来隐藏如何创建窗口的实现。 代码举例： 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869//Pizza属性类class Pizza &#123; private String dough = ""; private String sauce = ""; private String topping = ""; public void setDough (String dough) &#123; this.dough = dough; &#125; public void setSauce (String sauce) &#123; this.sauce = sauce; &#125; public void setTopping (String topping) &#123; this.topping = topping; &#125;&#125;//pizza生成器抽象类，相当于Pizza制作标准abstract class PizzaBuilder &#123; protected Pizza pizza;//创建Pizza对象 public void createNewPizzaProduct() &#123; pizza = new Pizza(); &#125;//将制作Pizza的方法抽象出来 public abstract void buildDough(); public abstract void buildSauce(); public abstract void buildTopping();//返回此Pizza，关键用法 public Pizza getPizza() &#123; return pizza; &#125;&#125;//具体的pizza生成器类，相当于Pizza制作具体到具体厂家class HawaiianPizzaBuilder extends PizzaBuilder &#123; public void buildDough() &#123; pizza.setDough("cross"); &#125; public void buildSauce() &#123; pizza.setSauce("mild"); &#125; public void buildTopping() &#123; pizza.setTopping("ham+pineapple"); &#125;&#125;class SpicyPizzaBuilder extends PizzaBuilder &#123; public void buildDough() &#123; pizza.setDough("pan baked"); &#125; public void buildSauce() &#123; pizza.setSauce("hot"); &#125; public void buildTopping() &#123; pizza.setTopping("pepperoni+salami"); &#125;&#125;//创建pizza，万恶的指挥者，构造传入具体厂家对象，利用厂家对象制作Pizza，并将Pizza放回供后面测试调用class Waiter &#123; private PizzaBuilder pizzaBuilder;//这两步可以用构造函数传入PizzaBuilder对象代替 public void setPizzaBuilder (PizzaBuilder pb) &#123; pizzaBuilder = pb; &#125; public Pizza getPizza() &#123; return pizzaBuilder.getPizza(); &#125;//提供一个方法将厂家的Pizza制作方法集合起来 public void constructPizza() &#123; pizzaBuilder.createNewPizzaProduct(); pizzaBuilder.buildDough(); pizzaBuilder.buildSauce(); pizzaBuilder.buildTopping(); &#125;&#125;//创建实例，Testclass BuilderExample &#123; public static void main(String[] args) &#123; Waiter waiter = new Waiter(); //构建Pizza制作厂家 PizzaBuilder hawaiian_pizzabuilder = new HawaiianPizzaBuilder(); PizzaBuilder spicy_pizzabuilder = new SpicyPizzaBuilder(); waiter.setPizzaBuilder ( hawaiian_pizzabuilder ); waiter.constructPizza(); //指挥者让厂家制作Pizza //为了构建一个复杂的Pizza对象，我们只需要利用Waiter这个简单对象即可 Pizza pizza = waiter.getPizza(); &#125;&#125;]]></content>
