@@ -564,6 +564,200 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://8bun.github.io/2019/09/07/SSM理解/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Mr.Chen">
+      <meta itemprop="description" content="鹿有森林，鲸有深海">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MrChen">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/09/07/SSM理解/" class="post-title-link" itemprop="url">SSM理解</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-09-07 20:18:51" itemprop="dateCreated datePublished" datetime="2019-09-07T20:18:51+08:00">2019-09-07</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-10-05 20:36:13" itemprop="dateModified" datetime="2019-10-05T20:36:13+08:00">2019-10-05</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/SSM/" itemprop="url" rel="index"><span itemprop="name">SSM</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="Spring父容器与SpringMVC子容器是如何体现出父子关系的？"><a href="#Spring父容器与SpringMVC子容器是如何体现出父子关系的？" class="headerlink" title="Spring父容器与SpringMVC子容器是如何体现出父子关系的？"></a>Spring父容器与SpringMVC子容器是如何体现出父子关系的？</h3><p>所谓容器，就是上下文，在这同一个上下文里，大家可以共享一些东西。</p>
+<p>在<code>Spring</code>应用启动时，会先读取<code>web.xml</code>文件，调用<code>ContextLoaderListener</code>创建<code>Spring</code>容器，也就是你说的父容器。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">listener</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">listener-class</span>&gt;</span>org.springframework.web.context.ContextLoaderListener<span class="tag">&lt;/<span class="name">listener-class</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">listener</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><code>Listener</code>创建完之后，开始创建<code>Servlet</code>：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">servlet</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>SpringMVC<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet-class</span>&gt;</span>org.springframework.web.servlet.DispatcherServlet<span class="tag">&lt;/<span class="name">servlet-class</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">servlet</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这时候这个<code>DispatcherServlet</code>开始试图创建<code>SpringMVC</code>的<code>ApplicationContext</code>，它先找刚才由上面那个<code>ContextLoaderListener</code>创建的<code>Spring</code>的<code>ApplicationContext</code>，找到后，把<code>Spring</code>的<code>ApplicationContext</code>作为参数传给<code>DispatcherServlet</code>的<code>ApplicationContext</code>的<code>setParent</code>方法，这样<code>SpringMVC</code>的容器就变成了<code>Spring</code>容器的儿子。</p>
+<p>因为在<code>SpringMVC</code>这个子容器创建的时候指定了它的<code>Spring</code>父容器，所以儿子能找到父亲，所以<code>SpringMVC</code>这个子容器里的<code>Bean</code>可以调用父容器的服务，而父容器不知道有这个儿子的存在（一个不负责任的父亲），父容器里的<code>Bean</code>不能调用子容器里的服务。</p>
+<h3 id="Spring和SpringMVC配置文件为什么要分开扫描"><a href="#Spring和SpringMVC配置文件为什么要分开扫描" class="headerlink" title="Spring和SpringMVC配置文件为什么要分开扫描"></a>Spring和SpringMVC配置文件为什么要分开扫描</h3><p>平时我们在项目中注入关系是这样的顺序：在<code>Service</code>中注入<code>Dao</code>（初始化自动注入，利用<code>@Autowired</code>），接着在<code>Controller</code>里注入<code>Service</code>（初始化自动注入，利用<code>@Autowired</code>）</p>
+<p>使用分开扫描的方式，一是为了使得父容器内的对象都能互相通信，二是为了让与浏览器显示息息相关的<code>jsp</code>文件直接关联的<code>Controller</code>与其他分隔开来，体现<code>SpringMVC</code>的思想。【在<code>Controller</code>里注入（可访问到，也就是子容器访问父容器对象）<code>Service</code>】。</p>
+<h3 id="事务为什么加在service层而不加在dao层。"><a href="#事务为什么加在service层而不加在dao层。" class="headerlink" title="事务为什么加在service层而不加在dao层。"></a>事务为什么加在service层而不加在dao层。</h3><p> <strong>在数据库中,所谓事务是指一组逻辑操作单元即一组sql语句。</strong></p>
+<p><strong>当这个单元中的一部分操作失败,整个事务回滚，只有全部正确才完成提交。</strong></p>
+<p><strong>判断事务是否配置成功的关键点在于出现异常时事务是否会回滚。</strong></p>
+<p> 给<code>Service</code>层配置事务，因为一个<code>Service</code>层方法操作可以关联到多个<code>Dao</code>的操作。在<code>Service</code>层执行这些<code>Dao</code>操作，多<code>Dao</code>操作有失败全部回滚，成功则全部提交。</p>
+<p>事务也一般放在service层进行配置，其原因可见：</p>
+<p>当然，事务的aop配置也一般放在<code>applicationContext.xml</code>进行配置，因为其涉及到</p>
+<h3 id="Mybatis整合Spring的思路"><a href="#Mybatis整合Spring的思路" class="headerlink" title="Mybatis整合Spring的思路"></a>Mybatis整合Spring的思路</h3><p><code>Mybatis</code>是使用<code>SqlSessionFactory</code>产生<code>dao</code>代理对象间接控制，然后使用代理对象调用其操作数据库的<code>dao</code>方法，这就是<code>Mybatis</code>的主要工作所在了。</p>
+<p>而<code>Mybatis</code>涉及到<code>dao</code>层的代理对象，也涉及到与数据源有关的<code>SqlSessionFactory</code></p>
+<p>总的来说，整合的思路：</p>
+<p><strong>主要是</strong>获取sqlSession对象，通过MapperScannerConfigurer 自动装配SqlSessionFactory 或 SqlSessionTemplate，MapperFactoryBean <strong>创建的代理类</strong>实现了 UserMapper 接口,并且注入到应用程序中</p>
+<p>整合方式详解：</p>
+<h3 id="IOC控制反转和依赖注入"><a href="#IOC控制反转和依赖注入" class="headerlink" title="IOC控制反转和依赖注入"></a>IOC控制反转和依赖注入</h3><p>控制反转：我们不需要去<code>new</code>对象，只需要告诉<code>Spring</code>去把我们这个对象的控制权交给<code>Spring</code></p>
+<p>依赖注入：告诉<code>Spring</code>我要用哪个对象，这个对象之前是被<code>Spring</code>控制的。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://8bun.github.io/2019/07/29/自定义Mybatis/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1953,186 +2147,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://8bun.github.io/2019/06/29/XDebug断点调试的工作原理/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Mr.Chen">
-      <meta itemprop="description" content="鹿有森林，鲸有深海">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MrChen">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/06/29/XDebug断点调试的工作原理/" class="post-title-link" itemprop="url">XDebug断点调试的工作原理</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2019-06-29 16:07:32" itemprop="dateCreated datePublished" datetime="2019-06-29T16:07:32+08:00">2019-06-29</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2019-07-03 18:27:50" itemprop="dateModified" datetime="2019-07-03T18:27:50+08:00">2019-07-03</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/调试/" itemprop="url" rel="index"><span itemprop="name">调试</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>对于PHP开发，初来咋到，开发环境的搭建和理解感觉是最操逼的一件事了。不像JAVA，打开一个Eclipse就可以开搞，Php的Debug都要几个插件来配合工作。这些都是死的，好说。</p>
-<p>对于Xdebug , 我的总结是：</p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/06/29/XDebug断点调试的工作原理/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2181,7 +2195,7 @@
                 
                   <a href="/archives">
                 
-                    <span class="site-state-item-count">21</span>
+                    <span class="site-state-item-count">22</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -2234,7 +2248,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">20</span>
+                      
+                    
+                    <span class="site-state-item-count">21</span>
                     <span class="site-state-item-name">categories</span>
                   
                 </div>
@@ -2327,7 +2343,13 @@
                     
                       
                     
-                    <span class="site-state-item-count">40</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">43</span>
                     <span class="site-state-item-name">tags</span>
                   
                 </div>

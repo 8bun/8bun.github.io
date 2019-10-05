@@ -42,6 +42,35 @@
   </entry>
   
   <entry>
+    <title>SSM理解</title>
+    <link href="https://8bun.github.io/2019/09/07/SSM%E7%90%86%E8%A7%A3/"/>
+    <id>https://8bun.github.io/2019/09/07/SSM理解/</id>
+    <published>2019-09-07T12:18:51.000Z</published>
+    <updated>2019-10-05T12:36:13.551Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="Spring父容器与SpringMVC子容器是如何体现出父子关系的？"><a href="#Spring父容器与SpringMVC子容器是如何体现出父子关系的？" class="headerlink" title="Spring父容器与SpringMVC子容器是如何体现出父子关系的？"></a>Spring父容器与SpringMVC子容器是如何体现出父子关系的？</h3><p>所谓容器，就是上下文，在这同一个上下文里，大家可以共享一些东西。</p><p>在<code>Spring</code>应用启动时，会先读取<code>web.xml</code>文件，调用<code>ContextLoaderListener</code>创建<code>Spring</code>容器，也就是你说的父容器。</p><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">listener</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">listener-class</span>&gt;</span>org.springframework.web.context.ContextLoaderListener<span class="tag">&lt;/<span class="name">listener-class</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">listener</span>&gt;</span></span><br></pre></td></tr></table></figure><p><code>Listener</code>创建完之后，开始创建<code>Servlet</code>：</p><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">servlet</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>SpringMVC<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet-class</span>&gt;</span>org.springframework.web.servlet.DispatcherServlet<span class="tag">&lt;/<span class="name">servlet-class</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">servlet</span>&gt;</span></span><br></pre></td></tr></table></figure><p>这时候这个<code>DispatcherServlet</code>开始试图创建<code>SpringMVC</code>的<code>ApplicationContext</code>，它先找刚才由上面那个<code>ContextLoaderListener</code>创建的<code>Spring</code>的<code>ApplicationContext</code>，找到后，把<code>Spring</code>的<code>ApplicationContext</code>作为参数传给<code>DispatcherServlet</code>的<code>ApplicationContext</code>的<code>setParent</code>方法，这样<code>SpringMVC</code>的容器就变成了<code>Spring</code>容器的儿子。</p><p>因为在<code>SpringMVC</code>这个子容器创建的时候指定了它的<code>Spring</code>父容器，所以儿子能找到父亲，所以<code>SpringMVC</code>这个子容器里的<code>Bean</code>可以调用父容器的服务，而父容器不知道有这个儿子的存在（一个不负责任的父亲），父容器里的<code>Bean</code>不能调用子容器里的服务。</p><h3 id="Spring和SpringMVC配置文件为什么要分开扫描"><a href="#Spring和SpringMVC配置文件为什么要分开扫描" class="headerlink" title="Spring和SpringMVC配置文件为什么要分开扫描"></a>Spring和SpringMVC配置文件为什么要分开扫描</h3><p>平时我们在项目中注入关系是这样的顺序：在<code>Service</code>中注入<code>Dao</code>（初始化自动注入，利用<code>@Autowired</code>），接着在<code>Controller</code>里注入<code>Service</code>（初始化自动注入，利用<code>@Autowired</code>）</p><p>使用分开扫描的方式，一是为了使得父容器内的对象都能互相通信，二是为了让与浏览器显示息息相关的<code>jsp</code>文件直接关联的<code>Controller</code>与其他分隔开来，体现<code>SpringMVC</code>的思想。【在<code>Controller</code>里注入（可访问到，也就是子容器访问父容器对象）<code>Service</code>】。</p><h3 id="事务为什么加在service层而不加在dao层。"><a href="#事务为什么加在service层而不加在dao层。" class="headerlink" title="事务为什么加在service层而不加在dao层。"></a>事务为什么加在service层而不加在dao层。</h3><p> <strong>在数据库中,所谓事务是指一组逻辑操作单元即一组sql语句。</strong></p><p><strong>当这个单元中的一部分操作失败,整个事务回滚，只有全部正确才完成提交。</strong></p><p><strong>判断事务是否配置成功的关键点在于出现异常时事务是否会回滚。</strong></p><p> 给<code>Service</code>层配置事务，因为一个<code>Service</code>层方法操作可以关联到多个<code>Dao</code>的操作。在<code>Service</code>层执行这些<code>Dao</code>操作，多<code>Dao</code>操作有失败全部回滚，成功则全部提交。</p><p>事务也一般放在service层进行配置，其原因可见：</p><p>当然，事务的aop配置也一般放在<code>applicationContext.xml</code>进行配置，因为其涉及到</p><h3 id="Mybatis整合Spring的思路"><a href="#Mybatis整合Spring的思路" class="headerlink" title="Mybatis整合Spring的思路"></a>Mybatis整合Spring的思路</h3><p><code>Mybatis</code>是使用<code>SqlSessionFactory</code>产生<code>dao</code>代理对象间接控制，然后使用代理对象调用其操作数据库的<code>dao</code>方法，这就是<code>Mybatis</code>的主要工作所在了。</p><p>而<code>Mybatis</code>涉及到<code>dao</code>层的代理对象，也涉及到与数据源有关的<code>SqlSessionFactory</code></p><p>总的来说，整合的思路：</p><p><strong>主要是</strong>获取sqlSession对象，通过MapperScannerConfigurer 自动装配SqlSessionFactory 或 SqlSessionTemplate，MapperFactoryBean <strong>创建的代理类</strong>实现了 UserMapper 接口,并且注入到应用程序中</p><p>整合方式详解：</p><h3 id="IOC控制反转和依赖注入"><a href="#IOC控制反转和依赖注入" class="headerlink" title="IOC控制反转和依赖注入"></a>IOC控制反转和依赖注入</h3><p>控制反转：我们不需要去<code>new</code>对象，只需要告诉<code>Spring</code>去把我们这个对象的控制权交给<code>Spring</code></p><p>依赖注入：告诉<code>Spring</code>我要用哪个对象，这个对象之前是被<code>Spring</code>控制的。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h3 id=&quot;Spring父容器与SpringMVC子容器是如何体现出父子关系的？&quot;&gt;&lt;a href=&quot;#Spring父容器与SpringMVC子容器是如何体现出父子关系的？&quot; class=&quot;headerlink&quot; title=&quot;Spring父容器与SpringMVC子容器是如
+      
+    
+    </summary>
+    
+      <category term="SSM" scheme="https://8bun.github.io/categories/SSM/"/>
+    
+    
+      <category term="Spring" scheme="https://8bun.github.io/tags/Spring/"/>
+    
+      <category term="SpringMVC" scheme="https://8bun.github.io/tags/SpringMVC/"/>
+    
+      <category term="Mabatis" scheme="https://8bun.github.io/tags/Mabatis/"/>
+    
+  </entry>
+  
+  <entry>
     <title>自定义Mybatis</title>
     <link href="https://8bun.github.io/2019/07/29/%E8%87%AA%E5%AE%9A%E4%B9%89Mybatis/"/>
     <id>https://8bun.github.io/2019/07/29/自定义Mybatis/</id>
@@ -538,36 +567,6 @@
       <category term="家庭" scheme="https://8bun.github.io/tags/%E5%AE%B6%E5%BA%AD/"/>
     
       <category term="都挺好" scheme="https://8bun.github.io/tags/%E9%83%BD%E6%8C%BA%E5%A5%BD/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>网络包传输过程</title>
-    <link href="https://8bun.github.io/2019/03/24/%E7%BD%91%E7%BB%9C%E5%8C%85%E7%9A%84%E4%BC%A0%E8%BE%93%E8%BF%87%E7%A8%8B/"/>
-    <id>https://8bun.github.io/2019/03/24/网络包的传输过程/</id>
-    <published>2019-03-24T10:22:00.000Z</published>
-    <updated>2019-03-25T14:08:45.450Z</updated>
-    
-    <content type="html"><![CDATA[<h4 id="协议栈与套接字"><a href="#协议栈与套接字" class="headerlink" title="协议栈与套接字"></a>协议栈与套接字</h4><p><strong>协议栈</strong>是一种网络控制软件，它主要根据套接字中记录的通信信息来工作。</p><p>在Window上使用<code>netstat</code>命令可以查看套接字的信息，使用<code>-ano</code>可以命令选择项，<code>a</code>表示显示所有套接字（包括正在通信和尚未开始通信等状态下的），<code>n</code>表示显示IP地址和端口号，<code>o</code>表示使用该套接字的程序PID。</p><p>在应用程序与服务器之间进行连接通信的过程，实质上进行了套接字的创建连接，通过套接字携带的目的端口、IP地址等进行匹配连接。创建套接字的过程非常简单，只要调用Socket库中的socket程序组件就可以了，实际上，创建完套接字后，该套接字传递到协议栈中后，协议栈会返回一个描述符，应用程序会将描述符存在内存中，以后委托协议栈使用哪个套接字来连接或收发数据，就可以直接出示描述符来避免多个套接字冲突。</p><a id="more"></a><p><strong><em>那么连接过程究竟是如何的呢？</em></strong></p><h4 id="数据连接过程"><a href="#数据连接过程" class="headerlink" title="数据连接过程"></a>数据连接过程</h4><p>协议栈中存在重要的TCP和IP模块，当套接字创建成功之后，客户端的协议栈生成一个<code>SYN</code>为1的TCP包，并发送给服务器，这个TCP包的头部还包含了客户端向服务器发送数据时使用的初始序号，以及服务器向客户端发送数据时需要用到的窗口大小。</p><p>协议栈将收到应用程序发过来的数据包加工后（加上协议头部），并不会马上发送出去，而是会根据一个叫<code>MTU</code>（Maximum Transmission Unit，最大传输单元）的参数进行判断，MTU的大小是协议栈协议头部和数据长度的总和，所以MTU-协议栈协议头部=<code>`MSS</code>（Maximum Segment Size，最大分段大小），当协议栈收到的数据接近或超过MSS时，就应该发送出去了。如果应用程序发送包的频率过小，很可能导致协议栈一直处于等待状态，为了解决这一问题，协议栈内部会有一个计时器规定等待发送的时间。</p><p>​    <strong>IP模块会根据TCP传递的目的服务器IP地址、发送IP写入IP头部，而不会管IP是否正确。</strong></p><p>​    <strong>实际上，一般计算机的网卡IP才是计算机的IP，每一个IP都可以将数据包传递到相应子网的以太网中，通过<code>route print</code>可以查看本地路由表判断该由哪块网卡发送。</strong></p><p>​    <strong>生成IP头部之后，接下来IP模块还要将MAC头部追加到IP头部之前，MAC头部是MAC头部是以太网使用的头部，MAC地址是路由器的以太网（cwq简单看成局域网）地址，如00-80-C8-2D-82-EA（也可以使用’.’代替’-‘）MAC头部包含了14个字节（接收方的MAC地址，发送方的MAC地址，以太类型，48+48+16bit），你可以通过ARP（Address Resolution Protocol，地址解析协议）查询目标服务器（网卡）的MAC地址，如果对方与自己在同一个子网中，就可以通过广播响应得到，为了减少空间消耗，每查询过的MAC地址生成的ARP包，都会被缓存起来，你可以通过<code>arp -a</code>查询缓存条目。</strong></p><p>​    <strong>接下来轮到网卡了，不过应该由网卡驱动程序来控制网卡（网卡的ROM中存在着世界上唯一的MAC地址，这是在生产的时候厂商就已经写入的），将IP数字信号转换为电信号（或光信号）发送出去，网卡中包含有MAC模块，网卡将发送包复制到缓冲区后，MAC模块会在缓冲区内将包取出，并在开头加上报头和起始帧分界符，在末尾加上用于检测错误的FCS（帧校验序列）</strong></p><p>​    <strong>报头是一串像<code>10101010...</code>这样1和0交替出现的比特序列，长度为56比特，它的作用是确定包的读取时机，主要是将1和0看成纵坐标画出的上下波动图代表电信号的高低电平的波动，如果有连续的1出现，那么此处就是读取时刻了。在这里有一个转换细节，就是连续的1出现和0出现，在电平波动上结果是一样的，那么就无法判断出这个读取时刻了，为了解决这一问题，引入了一个时钟信号，它是一段规律的电平波动，如在间隔时间，如</strong></p><p><strong><img src="https://gss0.bdstatic.com/94o3dSag_xI4khGkpoWK1HF6hhy/baike/s%3D250/sign=6269a09f968fa0ec7bc763081696594a/b7003af33a87e950359391c017385343faf2b491.jpg" alt="img">，然后通过和数据信号进行一一对应（作用完将信号传递给接收方，接收方根据信号提取出时钟信号，然后计算出数据信号），就可实现连续的1和0的判断，末尾的FCS校验序列是用来检查在包传输过程中因噪声导致的波形紊乱、数据错误，由32bit组成，通过一组公式从包头到尾部计算出来的，接收方可以通过相同的公式计算出此序列，比较开始的FCS序列是否出现不同来判断包数据是否出现错误，差异化会导致包被丢弃</strong></p><p>​    <strong>接下来就是交由网线发送了，发送信号的操作分为联众，一种使用集线器的半双工模式，一种使用交换机的全双工模式。半双工模式会先检查网线中是否存在其他正在传输的信号，有则待其传输完毕。</strong></p><p>​    <strong>然后，<code>PHY（MAU）</code>模块会将信号转换为可在网线上传输的信号格式，并通过网线发送出去。</strong></p><p>​    当这个包到达服务器后，服务器会发出一个包含<code>ACK</code>号（表示确认已收到包）、初始序号和窗口大小的<code>SYN</code>为1的包。</p><p>​    当这个包到达客户端后，客户端会返回一个包含确认收到包的<code>ACK</code>号的TCP包。</p><p>​    其中，为了防止网络攻击，通常会以一个随机数计算出的一个初始序号来代表第一个包的编号，并且通信双方在数据传递之前就已经知道这个初始序号。而<code>ACK</code>号是通过初始序号来计算得出的（表示为已经收到的第ACK字节之前的所有字节）。在得到对方确认之前，发送过的包都会保存在发送缓冲区中，以便TCP重传。</p><p>​    由于服务器的距离不是固定的，所以在返回ACK号所需时间也是不固定的。为了提高效率，TCP采用了动态调整等待时间（ACK号返回所需的时间）的方法。而为了能实现更高效地利用等待时间，客户端会在发送一个包之后，不等待ACK号的返回，而是直接发送后续的一系列包，我们称之为<strong>滑动窗口方式</strong>。</p><p>​    在服务器应用程序接收数据之前，会把接收到的包暂时先存储在自己的缓存区中，为了不过载，服务器会在返回ACK的时候顺带把自己缓冲区还能接收的数据空间大小返回。</p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h4 id=&quot;协议栈与套接字&quot;&gt;&lt;a href=&quot;#协议栈与套接字&quot; class=&quot;headerlink&quot; title=&quot;协议栈与套接字&quot;&gt;&lt;/a&gt;协议栈与套接字&lt;/h4&gt;&lt;p&gt;&lt;strong&gt;协议栈&lt;/strong&gt;是一种网络控制软件，它主要根据套接字中记录的通信信息来工作。&lt;/p&gt;
-&lt;p&gt;在Window上使用&lt;code&gt;netstat&lt;/code&gt;命令可以查看套接字的信息，使用&lt;code&gt;-ano&lt;/code&gt;可以命令选择项，&lt;code&gt;a&lt;/code&gt;表示显示所有套接字（包括正在通信和尚未开始通信等状态下的），&lt;code&gt;n&lt;/code&gt;表示显示IP地址和端口号，&lt;code&gt;o&lt;/code&gt;表示使用该套接字的程序PID。&lt;/p&gt;
-&lt;p&gt;在应用程序与服务器之间进行连接通信的过程，实质上进行了套接字的创建连接，通过套接字携带的目的端口、IP地址等进行匹配连接。创建套接字的过程非常简单，只要调用Socket库中的socket程序组件就可以了，实际上，创建完套接字后，该套接字传递到协议栈中后，协议栈会返回一个描述符，应用程序会将描述符存在内存中，以后委托协议栈使用哪个套接字来连接或收发数据，就可以直接出示描述符来避免多个套接字冲突。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="网络" scheme="https://8bun.github.io/categories/%E7%BD%91%E7%BB%9C/"/>
-    
-    
-      <category term="协议栈" scheme="https://8bun.github.io/tags/%E5%8D%8F%E8%AE%AE%E6%A0%88/"/>
-    
-      <category term="TCP/IP" scheme="https://8bun.github.io/tags/TCP-IP/"/>
-    
-      <category term="套接字" scheme="https://8bun.github.io/tags/%E5%A5%97%E6%8E%A5%E5%AD%97/"/>
-    
-      <category term="网卡" scheme="https://8bun.github.io/tags/%E7%BD%91%E5%8D%A1/"/>
     
   </entry>
   

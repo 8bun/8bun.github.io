@@ -12,6 +12,19 @@
       </tags>
   </entry>
   <entry>
+    <title><![CDATA[SSM理解]]></title>
+    <url>%2F2019%2F09%2F07%2FSSM%E7%90%86%E8%A7%A3%2F</url>
+    <content type="text"><![CDATA[Spring父容器与SpringMVC子容器是如何体现出父子关系的？所谓容器，就是上下文，在这同一个上下文里，大家可以共享一些东西。 在Spring应用启动时，会先读取web.xml文件，调用ContextLoaderListener创建Spring容器，也就是你说的父容器。 123&lt;listener&gt; &lt;listener-class&gt;org.springframework.web.context.ContextLoaderListener&lt;/listener-class&gt;&lt;/listener&gt; Listener创建完之后，开始创建Servlet： 1234&lt;servlet&gt; &lt;servlet-name&gt;SpringMVC&lt;/servlet-name&gt; &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;&lt;/servlet&gt; 这时候这个DispatcherServlet开始试图创建SpringMVC的ApplicationContext，它先找刚才由上面那个ContextLoaderListener创建的Spring的ApplicationContext，找到后，把Spring的ApplicationContext作为参数传给DispatcherServlet的ApplicationContext的setParent方法，这样SpringMVC的容器就变成了Spring容器的儿子。 因为在SpringMVC这个子容器创建的时候指定了它的Spring父容器，所以儿子能找到父亲，所以SpringMVC这个子容器里的Bean可以调用父容器的服务，而父容器不知道有这个儿子的存在（一个不负责任的父亲），父容器里的Bean不能调用子容器里的服务。 Spring和SpringMVC配置文件为什么要分开扫描平时我们在项目中注入关系是这样的顺序：在Service中注入Dao（初始化自动注入，利用@Autowired），接着在Controller里注入Service（初始化自动注入，利用@Autowired） 使用分开扫描的方式，一是为了使得父容器内的对象都能互相通信，二是为了让与浏览器显示息息相关的jsp文件直接关联的Controller与其他分隔开来，体现SpringMVC的思想。【在Controller里注入（可访问到，也就是子容器访问父容器对象）Service】。 事务为什么加在service层而不加在dao层。 在数据库中,所谓事务是指一组逻辑操作单元即一组sql语句。 当这个单元中的一部分操作失败,整个事务回滚，只有全部正确才完成提交。 判断事务是否配置成功的关键点在于出现异常时事务是否会回滚。 给Service层配置事务，因为一个Service层方法操作可以关联到多个Dao的操作。在Service层执行这些Dao操作，多Dao操作有失败全部回滚，成功则全部提交。 事务也一般放在service层进行配置，其原因可见： 当然，事务的aop配置也一般放在applicationContext.xml进行配置，因为其涉及到 Mybatis整合Spring的思路Mybatis是使用SqlSessionFactory产生dao代理对象间接控制，然后使用代理对象调用其操作数据库的dao方法，这就是Mybatis的主要工作所在了。 而Mybatis涉及到dao层的代理对象，也涉及到与数据源有关的SqlSessionFactory 总的来说，整合的思路： 主要是获取sqlSession对象，通过MapperScannerConfigurer 自动装配SqlSessionFactory 或 SqlSessionTemplate，MapperFactoryBean 创建的代理类实现了 UserMapper 接口,并且注入到应用程序中 整合方式详解： IOC控制反转和依赖注入控制反转：我们不需要去new对象，只需要告诉Spring去把我们这个对象的控制权交给Spring 依赖注入：告诉Spring我要用哪个对象，这个对象之前是被Spring控制的。]]></content>
+      <categories>
+        <category>SSM</category>
+      </categories>
+      <tags>
+        <tag>Spring</tag>
+        <tag>SpringMVC</tag>
+        <tag>Mabatis</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[自定义Mybatis]]></title>
     <url>%2F2019%2F07%2F29%2F%E8%87%AA%E5%AE%9A%E4%B9%89Mybatis%2F</url>
     <content type="text"><![CDATA[Java与数据库交互的基本步骤 加载驱动类(com.mysql.jdbc.Driver) 获取Connection对象(通过url、user、password) 获取PreparedStatement操作对象(通过Connection对象以及SQL语句) 执行 返回ResultSet并进行遍历，使用List集合添加每一行的对象 返回List集合]]></content>
