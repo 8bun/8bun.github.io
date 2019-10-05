@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://8bun.github.io/"/>
-  <updated>2019-10-05T12:44:18.039Z</updated>
+  <updated>2019-10-05T12:46:06.385Z</updated>
   <id>https://8bun.github.io/</id>
   
   <author>
@@ -21,17 +21,16 @@
     <link href="https://8bun.github.io/2019/10/05/Go%E7%80%B9%E7%82%B5%E5%B9%87BSo%E5%AE%9E%E7%8E%B0BS%E6%A8%A1%E5%BC%8F%E4%B8%89%E5%B1%82%E7%BB%93%E6%9E%84/"/>
     <id>https://8bun.github.io/2019/10/05/Go瀹炵幇BSo实现BS模式三层结构/</id>
     <published>2019-10-05T12:41:27.000Z</published>
-    <updated>2019-10-05T12:44:18.039Z</updated>
+    <updated>2019-10-05T12:46:06.385Z</updated>
     
-    <content type="html"><![CDATA[<p>PHP语言编写，与数据库交互的登录注册小Example，体现B/S三层结构</p><p>代码细节请点击：</p>]]></content>
+    <content type="html"><![CDATA[<p>PHP语言编写，与数据库交互的登录注册小Example，体现B/S三层结构</p><p>代码细节请点击：<a href="https://github.com/8bun/BSExample" rel="external nofollow noopener noreferrer" target="_blank">https://github.com/8bun/BSExample</a></p>]]></content>
     
     <summary type="html">
     
       
       
         &lt;p&gt;PHP语言编写，与数据库交互的登录注册小Example，体现B/S三层结构&lt;/p&gt;
-&lt;p&gt;代码细节请点击：&lt;/p&gt;
-
+&lt;p&gt;代码细节请点击：&lt;a href=&quot;https://github.com/8bun/BSExample&quot; rel=&quot;external nofollow noopener noreferr
       
     
     </summary>
