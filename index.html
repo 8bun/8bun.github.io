@@ -400,6 +400,338 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://8bun.github.io/2019/10/05/Java之设计模式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Mr.Chen">
+      <meta itemprop="description" content="鹿有森林，鲸有深海">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MrChen">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/10/05/Java之设计模式/" class="post-title-link" itemprop="url">Java之设计模式</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-10-05 20:04:40 / Modified: 20:32:42" itemprop="dateCreated datePublished" datetime="2019-10-05T20:04:40+08:00">2019-10-05</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="生成器模式"><a href="#生成器模式" class="headerlink" title="生成器模式"></a>生成器模式</h2><p>用法：当要创建一个具有复杂功能的对象时，我们可以使用一个简单对象来创建。它从小而简单的对象逐步创建更大更复杂的对象。生成器模式是另一个创建模式。</p>
+<p>举例：当创建一个窗口作为我们应用程序的主窗口时，我们需要创建一个菜单，一个工具栏，然后添加菜单和工具栏。对于我们要创建的每个窗口，我们需要创建一个空窗口，创建菜单，创建工具栏，将菜单和工具栏安装到窗口。我们可以使用构建器模式来隐藏如何创建窗口的实现。</p>
+<p>代码举例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Pizza属性类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Pizza</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> String dough = <span class="string">""</span>;</span><br><span class="line">  <span class="keyword">private</span> String sauce = <span class="string">""</span>;</span><br><span class="line">  <span class="keyword">private</span> String topping = <span class="string">""</span>;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setDough</span> <span class="params">(String dough)</span>     </span>&#123; <span class="keyword">this</span>.dough = dough; &#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setSauce</span> <span class="params">(String sauce)</span>     </span>&#123; <span class="keyword">this</span>.sauce = sauce; &#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setTopping</span> <span class="params">(String topping)</span> </span>&#123; <span class="keyword">this</span>.topping = topping; &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//pizza生成器抽象类，相当于Pizza制作标准</span></span><br><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">PizzaBuilder</span> </span>&#123;</span><br><span class="line">  <span class="keyword">protected</span> Pizza pizza;</span><br><span class="line"><span class="comment">//创建Pizza对象</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">createNewPizzaProduct</span><span class="params">()</span> </span>&#123; pizza = <span class="keyword">new</span> Pizza(); &#125;</span><br><span class="line"><span class="comment">//将制作Pizza的方法抽象出来</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">buildDough</span><span class="params">()</span></span>;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">buildSauce</span><span class="params">()</span></span>;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">buildTopping</span><span class="params">()</span></span>;</span><br><span class="line"><span class="comment">//返回此Pizza，关键用法</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> Pizza <span class="title">getPizza</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> pizza; &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//具体的pizza生成器类，相当于Pizza制作具体到具体厂家</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HawaiianPizzaBuilder</span> <span class="keyword">extends</span> <span class="title">PizzaBuilder</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildDough</span><span class="params">()</span>   </span>&#123; pizza.setDough(<span class="string">"cross"</span>); &#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildSauce</span><span class="params">()</span>   </span>&#123; pizza.setSauce(<span class="string">"mild"</span>); &#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildTopping</span><span class="params">()</span> </span>&#123; pizza.setTopping(<span class="string">"ham+pineapple"</span>); &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SpicyPizzaBuilder</span> <span class="keyword">extends</span> <span class="title">PizzaBuilder</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildDough</span><span class="params">()</span>   </span>&#123; pizza.setDough(<span class="string">"pan baked"</span>); &#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildSauce</span><span class="params">()</span>   </span>&#123; pizza.setSauce(<span class="string">"hot"</span>); &#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildTopping</span><span class="params">()</span> </span>&#123; pizza.setTopping(<span class="string">"pepperoni+salami"</span>); &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//创建pizza，万恶的指挥者，构造传入具体厂家对象，利用厂家对象制作Pizza，并将Pizza放回供后面测试调用</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Waiter</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> PizzaBuilder pizzaBuilder;</span><br><span class="line"><span class="comment">//这两步可以用构造函数传入PizzaBuilder对象代替</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setPizzaBuilder</span> <span class="params">(PizzaBuilder pb)</span> </span>&#123; pizzaBuilder = pb; &#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> Pizza <span class="title">getPizza</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> pizzaBuilder.getPizza(); &#125;</span><br><span class="line"><span class="comment">//提供一个方法将厂家的Pizza制作方法集合起来</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">constructPizza</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    pizzaBuilder.createNewPizzaProduct();</span><br><span class="line">    pizzaBuilder.buildDough();</span><br><span class="line">    pizzaBuilder.buildSauce();</span><br><span class="line">    pizzaBuilder.buildTopping();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//创建实例，Test</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BuilderExample</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">   </span><br><span class="line">    Waiter waiter = <span class="keyword">new</span> Waiter();</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//构建Pizza制作厂家</span></span><br><span class="line">    PizzaBuilder hawaiian_pizzabuilder = <span class="keyword">new</span> HawaiianPizzaBuilder();</span><br><span class="line">    PizzaBuilder spicy_pizzabuilder = <span class="keyword">new</span> SpicyPizzaBuilder();</span><br><span class="line"></span><br><span class="line">    waiter.setPizzaBuilder ( hawaiian_pizzabuilder );</span><br><span class="line">    waiter.constructPizza();  <span class="comment">//指挥者让厂家制作Pizza</span></span><br><span class="line">      </span><br><span class="line">	<span class="comment">//为了构建一个复杂的Pizza对象，我们只需要利用Waiter这个简单对象即可</span></span><br><span class="line">    Pizza pizza = waiter.getPizza();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://8bun.github.io/2019/07/29/自定义Mybatis/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Mr.Chen">
+      <meta itemprop="description" content="鹿有森林，鲸有深海">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MrChen">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/07/29/自定义Mybatis/" class="post-title-link" itemprop="url">自定义Mybatis</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-07-29 19:02:35 / Modified: 22:29:11" itemprop="dateCreated datePublished" datetime="2019-07-29T19:02:35+08:00">2019-07-29</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Mybatis/" itemprop="url" rel="index"><span itemprop="name">Mybatis</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Java与数据库交互的基本步骤"><a href="#Java与数据库交互的基本步骤" class="headerlink" title="Java与数据库交互的基本步骤"></a>Java与数据库交互的基本步骤</h1><ol>
+<li>加载驱动类(<code>com.mysql.jdbc.Driver</code>)</li>
+<li>获取<code>Connection</code>对象(通过<code>url、user、password</code>)</li>
+<li>获取<code>PreparedStatement</code>操作对象(通过<code>Connection对象以及SQL语句</code>)</li>
+<li>执行</li>
+<li>返回<code>ResultSet</code>并进行遍历，使用<code>List</code>集合添加每一行的对象</li>
+<li>返回<code>List</code>集合</li>
+</ol>
+<h2 id><a href="#" class="headerlink" title=" "></a> </h2>
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://8bun.github.io/2019/07/13/XML之xmlns相关/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1801,348 +2133,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://8bun.github.io/2019/05/13/Vue之组件传值/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Mr.Chen">
-      <meta itemprop="description" content="鹿有森林，鲸有深海">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MrChen">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/05/13/Vue之组件传值/" class="post-title-link" itemprop="url">Vue之组件传值</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2019-05-13 18:57:55 / Modified: 20:27:56" itemprop="dateCreated datePublished" datetime="2019-05-13T18:57:55+08:00">2019-05-13</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Vue/" itemprop="url" rel="index"><span itemprop="name">Vue</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>在学习前端框架Vue时，遇到了组件之间的传值问题，索性take a note。</p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/05/13/Vue之组件传值/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://8bun.github.io/2019/05/10/网络之集线器、交换机和路由器异同之处/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Mr.Chen">
-      <meta itemprop="description" content="鹿有森林，鲸有深海">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MrChen">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/05/10/网络之集线器、交换机和路由器异同之处/" class="post-title-link" itemprop="url">网络之集线器、交换机和路由器异同之处</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2019-05-10 19:43:50 / Modified: 20:55:39" itemprop="dateCreated datePublished" datetime="2019-05-10T19:43:50+08:00">2019-05-10</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/网络/" itemprop="url" rel="index"><span itemprop="name">网络</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>我们知道，网络上数据包的传输需要经过集线器、交换机、路由器等设备，它们之间的紧密合作将各方各地的信息相互联系起来，起到了十分重要的作用。</p>
-<p><strong>信号从网卡流出进入网线的过程如下：</strong></p>
-<p>网卡中的PHY(物理层装置，以前低速方式中则称为介质连接单元，即MAU)模块将包转换为电信号之后，信号通过RJ-45接口进入双绞线。【以太网信号的本质是正负变化的电压，使用双绞线可以抵消螺旋产生噪声电流，抑制噪声】</p>
-<p>然后，信号达到了集线器，这个过程中信号会因各种因素而衰减。</p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/05/10/网络之集线器、交换机和路由器异同之处/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -2186,7 +2181,7 @@
                 
                   <a href="/archives">
                 
-                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-count">21</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -2235,7 +2230,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">18</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">20</span>
                     <span class="site-state-item-name">categories</span>
                   
                 </div>
@@ -2324,7 +2323,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">38</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">40</span>
                     <span class="site-state-item-name">tags</span>
                   
                 </div>
