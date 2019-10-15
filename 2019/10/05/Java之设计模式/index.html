@@ -102,7 +102,7 @@
 <meta property="og:site_name" content="MrChen">
 <meta property="og:description" content="生成器模式用法：当要创建一个具有复杂功能的对象时，我们可以使用一个简单对象来创建。它从小而简单的对象逐步创建更大更复杂的对象。生成器模式是另一个创建模式。 举例：当创建一个窗口作为我们应用程序的主窗口时，我们需要创建一个菜单，一个工具栏，然后添加菜单和工具栏。对于我们要创建的每个窗口，我们需要创建一个空窗口，创建菜单，创建工具栏，将菜单和工具栏安装到窗口。我们可以使用构建器模式来隐藏如何创建窗口的">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-10-05T12:32:42.623Z">
+<meta property="og:updated_time" content="2019-10-15T14:41:09.765Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java之设计模式">
 <meta name="twitter:description" content="生成器模式用法：当要创建一个具有复杂功能的对象时，我们可以使用一个简单对象来创建。它从小而简单的对象逐步创建更大更复杂的对象。生成器模式是另一个创建模式。 举例：当创建一个窗口作为我们应用程序的主窗口时，我们需要创建一个菜单，一个工具栏，然后添加菜单和工具栏。对于我们要创建的每个窗口，我们需要创建一个空窗口，创建菜单，创建工具栏，将菜单和工具栏安装到窗口。我们可以使用构建器模式来隐藏如何创建窗口的">
@@ -444,12 +444,24 @@
                 
               
 
-              <time title="Created: 2019-10-05 20:04:40 / Modified: 20:32:42" itemprop="dateCreated datePublished" datetime="2019-10-05T20:04:40+08:00">2019-10-05</time>
+              <time title="Created: 2019-10-05 20:04:40" itemprop="dateCreated datePublished" datetime="2019-10-05T20:04:40+08:00">2019-10-05</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-10-15 22:41:09" itemprop="dateModified" datetime="2019-10-15T22:41:09+08:00">2019-10-15</time>
               
             
           </span>
@@ -512,6 +524,17 @@
 <p>举例：当创建一个窗口作为我们应用程序的主窗口时，我们需要创建一个菜单，一个工具栏，然后添加菜单和工具栏。对于我们要创建的每个窗口，我们需要创建一个空窗口，创建菜单，创建工具栏，将菜单和工具栏安装到窗口。我们可以使用构建器模式来隐藏如何创建窗口的实现。</p>
 <p>代码举例：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Pizza属性类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Pizza</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> String dough = <span class="string">""</span>;</span><br><span class="line">  <span class="keyword">private</span> String sauce = <span class="string">""</span>;</span><br><span class="line">  <span class="keyword">private</span> String topping = <span class="string">""</span>;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setDough</span> <span class="params">(String dough)</span>     </span>&#123; <span class="keyword">this</span>.dough = dough; &#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setSauce</span> <span class="params">(String sauce)</span>     </span>&#123; <span class="keyword">this</span>.sauce = sauce; &#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setTopping</span> <span class="params">(String topping)</span> </span>&#123; <span class="keyword">this</span>.topping = topping; &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//pizza生成器抽象类，相当于Pizza制作标准</span></span><br><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">PizzaBuilder</span> </span>&#123;</span><br><span class="line">  <span class="keyword">protected</span> Pizza pizza;</span><br><span class="line"><span class="comment">//创建Pizza对象</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">createNewPizzaProduct</span><span class="params">()</span> </span>&#123; pizza = <span class="keyword">new</span> Pizza(); &#125;</span><br><span class="line"><span class="comment">//将制作Pizza的方法抽象出来</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">buildDough</span><span class="params">()</span></span>;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">buildSauce</span><span class="params">()</span></span>;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">buildTopping</span><span class="params">()</span></span>;</span><br><span class="line"><span class="comment">//返回此Pizza，关键用法</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> Pizza <span class="title">getPizza</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> pizza; &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//具体的pizza生成器类，相当于Pizza制作具体到具体厂家</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HawaiianPizzaBuilder</span> <span class="keyword">extends</span> <span class="title">PizzaBuilder</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildDough</span><span class="params">()</span>   </span>&#123; pizza.setDough(<span class="string">"cross"</span>); &#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildSauce</span><span class="params">()</span>   </span>&#123; pizza.setSauce(<span class="string">"mild"</span>); &#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildTopping</span><span class="params">()</span> </span>&#123; pizza.setTopping(<span class="string">"ham+pineapple"</span>); &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SpicyPizzaBuilder</span> <span class="keyword">extends</span> <span class="title">PizzaBuilder</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildDough</span><span class="params">()</span>   </span>&#123; pizza.setDough(<span class="string">"pan baked"</span>); &#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildSauce</span><span class="params">()</span>   </span>&#123; pizza.setSauce(<span class="string">"hot"</span>); &#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildTopping</span><span class="params">()</span> </span>&#123; pizza.setTopping(<span class="string">"pepperoni+salami"</span>); &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//创建pizza，万恶的指挥者，构造传入具体厂家对象，利用厂家对象制作Pizza，并将Pizza放回供后面测试调用</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Waiter</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> PizzaBuilder pizzaBuilder;</span><br><span class="line"><span class="comment">//这两步可以用构造函数传入PizzaBuilder对象代替</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setPizzaBuilder</span> <span class="params">(PizzaBuilder pb)</span> </span>&#123; pizzaBuilder = pb; &#125;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> Pizza <span class="title">getPizza</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> pizzaBuilder.getPizza(); &#125;</span><br><span class="line"><span class="comment">//提供一个方法将厂家的Pizza制作方法集合起来</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">constructPizza</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    pizzaBuilder.createNewPizzaProduct();</span><br><span class="line">    pizzaBuilder.buildDough();</span><br><span class="line">    pizzaBuilder.buildSauce();</span><br><span class="line">    pizzaBuilder.buildTopping();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//创建实例，Test</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BuilderExample</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">   </span><br><span class="line">    Waiter waiter = <span class="keyword">new</span> Waiter();</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//构建Pizza制作厂家</span></span><br><span class="line">    PizzaBuilder hawaiian_pizzabuilder = <span class="keyword">new</span> HawaiianPizzaBuilder();</span><br><span class="line">    PizzaBuilder spicy_pizzabuilder = <span class="keyword">new</span> SpicyPizzaBuilder();</span><br><span class="line"></span><br><span class="line">    waiter.setPizzaBuilder ( hawaiian_pizzabuilder );</span><br><span class="line">    waiter.constructPizza();  <span class="comment">//指挥者让厂家制作Pizza</span></span><br><span class="line">      </span><br><span class="line">	<span class="comment">//为了构建一个复杂的Pizza对象，我们只需要利用Waiter这个简单对象即可</span></span><br><span class="line">    Pizza pizza = waiter.getPizza();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h2><p>观察者模式(Observer Pattern)：定义对象间的一种一对多依赖关系，使得每当一个对象状态发生改变时，其相关依赖对象皆得到通知并被自动更新。观察者模式又叫做发布-订阅模式。在观察者模式中，发布者我们称之为被观察者，订阅者称之为观察者。</p>
+<p>关于观察者模式有两种应用：</p>
+<h3 id="自定义"><a href="#自定义" class="headerlink" title="自定义"></a>自定义</h3><p>主要实现思路是，观察者和被观察者都定义成接口形式，</p>
+<p>被观察者接口提供增删观察者的方法通知方法，在实现类中添加数据设置方法</p>
+<p>观察者接口提供数据更新方法</p>
+<p>观察者实现类注入被观察者接口，并绑定与该观察者的关系（被观察者添加该观察者）</p>
+<p>在测试时，构造一个被观察者以及多个观察者对象，被观察者尝试设置数据，看观察者是否接收到信息。&gt;</p>
+<h3 id="使用Java内置API"><a href="#使用Java内置API" class="headerlink" title="使用Java内置API"></a>使用Java内置API</h3><p>在<code>Java</code>中，继承<code>Observable</code>的类称为可被观察者，实现<code>Observer</code>接口的类称为观察者。</p>
+<p>有了以上的内置<code>API</code>，我们不再需要自己写两种接口了。</p>
+<p>这里，需要注意的是，观察者需要实现接口的<code>update(Observable o, Object arg)</code>方法，其中第一个参数就是被观察者对象，而它依然是通过构造注入观察者类的。在该方法中，你可以读取到被观察者的数据，从而被观察者实现了”通知”。</p>
+<p>以上两种方式具体代码实现可见：&lt;<a href="https://blog.csdn.net/zhongxuebin_xq/article/details/81429625" rel="external nofollow noopener noreferrer" target="_blank">https://blog.csdn.net/zhongxuebin_xq/article/details/81429625</a></p>
 
       
     </div>
@@ -634,8 +657,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/10/05/Go实现BS模式三层结构/" rel="prev" title="Go实现BS模式三层结构">
-                Go实现BS模式三层结构 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/10/05/PHP实现BS模式三层结构/" rel="prev" title="PHP实现BS模式三层结构">
+                PHP实现BS模式三层结构 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -723,6 +746,8 @@
                 <div class="site-state-item site-state-categories">
                   
                     
+                    
+                      
                     
                       
                     
@@ -951,7 +976,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#生成器模式"><span class="nav-number">1.</span> <span class="nav-text">生成器模式</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#生成器模式"><span class="nav-number">1.</span> <span class="nav-text">生成器模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#观察者模式"><span class="nav-number">2.</span> <span class="nav-text">观察者模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义"><span class="nav-number">2.1.</span> <span class="nav-text">自定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用Java内置API"><span class="nav-number">2.2.</span> <span class="nav-text">使用Java内置API</span></a></li></ol></li></ol></div>
             
 
           </div>
